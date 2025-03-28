@@ -600,18 +600,16 @@ int Aqualin::speelUitScore(int algo1, int algo2) {
     algo_t algos[3] = {&Aqualin::opt_score,
                        &Aqualin::bepaalZetGrootsteCluster,
                        &Aqualin::bepaalZetMonteCarlo};
-    int toggle = algo1;
+    algo_t speler_algo[2] = {algos[algo1 - 1], algos[algo2 - 1]};
 
     while (!eindstand()) {
         aantal_zetten++;
 
-        steen_t zet = (this->*algos[toggle - 1])();
+        steen_t zet = (this->*speler_algo[speler_actief])();
         if (!doeZet(zet.first, zet.second)) {
             cout << "Iets ging er fout!!" << endl;
             break;
         }
-
-        toggle = (toggle == algo1) ? algo2 : algo1;
     }
 
     bereken_score();
