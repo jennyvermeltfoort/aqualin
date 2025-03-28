@@ -13,7 +13,8 @@ typedef enum : bool {
 
 class Hand {
    private:
-    bool heeft[MaxKleurenVormen * MaxKleurenVormen];
+    bool heeft_opslag[MaxKleurenVormen * MaxKleurenVormen + 1];
+    bool *heeft;
     int hand[MaxKeuzeAantal];
     int index[MaxKleurenVormen * MaxKleurenVormen];
     int vrij[MaxKeuzeAantal];
@@ -55,7 +56,6 @@ class Cluster {
     void zet(int p1, int p2);
     int waarde_grootste(void);
     int waarde_kwadraat(void);
-    void laat_zien(void);
 };
 
 class Aqualin {

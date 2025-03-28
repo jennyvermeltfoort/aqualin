@@ -10,6 +10,8 @@
 #include "standaard.h"
 
 Hand::Hand(void) {
+    heeft = &heeft_opslag[1];
+    heeft[-1] = false;
     for (int i = 0; i < MaxKeuzeAantal; i++) {
         vrij[i] = i;
         hand[i] = -1;
@@ -276,16 +278,14 @@ bool Aqualin::eindstand() {
 //*************************************************************************
 
 bool Aqualin::doe_zet(int steen) {
-    if (steen == -1 ||
-        !hand_speler[speler_actief]->heeft_steen(steen)) {
-        return false;
+    bool heeft = hand_speler[speler_actief]->heeft_steen(steen);
+    if (heeft) {
+        leg_steen(positie_volgende(), steen);
+        hand_speler[speler_actief]->neem_steen(steen);
+        speler_pot_neem(speler_actief);
+        speler_wissel();
     }
-
-    leg_steen(positie_volgende(), steen);
-    hand_speler[speler_actief]->neem_steen(steen);
-    speler_pot_neem(speler_actief);
-    speler_wissel();
-    return true;
+    return heeft;
 }
 
 bool Aqualin::doeZet(int kleur, int vorm) {
@@ -342,7 +342,7 @@ void Cluster::verhoog(int waarde) {
 }
 
 void Cluster::maak(int p) {
-    if (clusters[p] == nullptr) {
+    if (clusters[p] != nullptr) {
         int *index = &waardes[aantal++];
         clusters[p] = index;
         verhoog(*index);
@@ -431,15 +431,6 @@ void Aqualin::bereken_score(void) {
         if ((pos.first + 1) < breedte)
             verbind_buur(p, p + 1);                       // rechts
         if ((pos.first - 1) > 0) verbind_buur(p, p - 1);  // links
-    }
-}
-
-void Cluster::laat_zien(void) {
-    std::cout << grootste << ", grootste: " << tellers[grootste]
-              << std::endl;
-
-    for (int i = 0; i < aantal; i++) {
-        std::cout << i << ": " << tellers[i] << std::endl;
     }
 }
 
