@@ -351,29 +351,25 @@ void Cluster::maak(int p) {
 
 void Cluster::zet(int p1, int p2) {
     // roep alleen aan wanneer twee posities een verbinding delen.
-    if (clusters[p1] == nullptr) {
+    int *c1 = clusters[p1];
+    int *c2 = clusters[p2];
+    if (c1 == nullptr) {
         // cluster bestaat nog niet, dus verbind de positie met het
         // cluster via de pointer.
-        clusters[p1] = clusters[p2];
-        verhoog(*clusters[p2]);
-    } else if (*clusters[p1] == *clusters[p2]) {
-        // cluster index waardes van beide posities zijn gelijk, dus
-        // doe niets.
-        return;
-    } else {
-        // cluster bestaat al, dus verbind de twee clusters.
-        verbind(p1, clusters[p2]);
+        clusters[p1] = c2;
+        verhoog(*c2);
+    } else if (*c1 != *c2) {
+        verbind(c1, c2);
     }
 }
 
-void Cluster::verbind(int p, int *cluster) {
-    int *waarde = clusters[p];
-    tellers[*cluster] += tellers[*waarde];
-    tellers[*waarde] = 0;
-    *waarde = *cluster;
+void Cluster::verbind(int *c1, int *c2) {
+    tellers[*c2] += tellers[*c1];
+    tellers[*c1] = 0;
+    *c1 = *c2;
 
-    if (tellers[*waarde] >= tellers[grootste]) {
-        grootste = *waarde;
+    if (tellers[*c1] >= tellers[grootste]) {
+        grootste = *c1;
     }
 }
 
@@ -389,11 +385,7 @@ int Cluster::waarde_kwadraat(void) {
 }
 
 void Aqualin::verbind_buur(int p, int b) {
-    // maak een nieuwe cluster index voor buur wanneer niet verbonden,
-    // wanneer wel verbonden delen beide posities dezelfde cluster
-    // index.
-    pair<bool, bool> verbonden;
-    verbonden = zijn_verbonden(p, b);
+    pair<bool, bool> verbonden = zijn_verbonden(p, b);
     if (verbonden.first) {
         cluster_kleur.zet(b, p);
     }

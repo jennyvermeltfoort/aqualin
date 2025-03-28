@@ -48,7 +48,7 @@ class Cluster {
 
    public:
     Cluster();
-    void verbind(int p, int *cluster);
+    void verbind(int *c1, int *c2);
     void verhoog(int waarde);
     void maak(int p);
     void reset(int hoogte, int breedte);
