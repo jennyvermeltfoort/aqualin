@@ -342,7 +342,7 @@ void Cluster::verhoog(int waarde) {
 }
 
 void Cluster::maak(int p) {
-    if (clusters[p] != nullptr) {
+    if (clusters[p] == nullptr) {
         int *index = &waardes[aantal++];
         clusters[p] = index;
         verhoog(*index);
@@ -388,9 +388,13 @@ void Aqualin::verbind_buur(int p, int b) {
     pair<bool, bool> verbonden = zijn_verbonden(p, b);
     if (verbonden.first) {
         cluster_kleur.zet(b, p);
+    } else {
+        cluster_kleur.maak(b);
     }
     if (verbonden.second) {
         cluster_vorm.zet(b, p);
+    } else {
+        cluster_vorm.maak(b);
     }
 }
 
@@ -417,20 +421,17 @@ void Aqualin::bereken_score(void) {
     cluster_kleur.reset(hoogte, breedte);
     cluster_vorm.reset(hoogte, breedte);
 
-    pos_t pos = posities[0];
-    int p = pos.second * breedte + pos.first;
-    for (int i = 0; i < positie_index; i++) {
-        pos = posities[i];
-        p = pos.second * breedte + pos.first;
-        cluster_kleur.maak(p);
-        cluster_vorm.maak(p);
-        if (pos.second - 1 > 0)
-            verbind_buur(p, p - breedte);  // boven
-        if (pos.second + 1 < hoogte)
+    cluster_kleur.maak(0);
+    cluster_vorm.maak(0);
+    for (int y = 0; y < hoogte - 1; y++) {
+        int p = 0;
+        for (int x = 0; x < breedte - 1; x++) {
+            p = y * breedte + x;
             verbind_buur(p, p + breedte);  // onder
-        if ((pos.first + 1) < breedte)
-            verbind_buur(p, p + 1);                       // rechts
-        if ((pos.first - 1) > 0) verbind_buur(p, p - 1);  // links
+            verbind_buur(p, p + 1);        // rechts
+        }
+        verbind_buur(p + 1,
+                     p + 1 + breedte);  // onder van rechtse kolom
     }
 }
 
