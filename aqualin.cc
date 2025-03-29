@@ -429,6 +429,11 @@ void Aqualin::bereken_score(void) {
         verbind_buur(p + 1,
                      p + 1 + breedte);  // onder van rechtse kolom
     }
+
+    for (int i = hoogte * breedte - breedte; i < hoogte * breedte - 1;
+         i++) {
+        verbind_buur(i, i + 1);
+    }
 }
 
 int Aqualin::opt_score(pair<int, int> &optZet,
