@@ -237,30 +237,36 @@ typedef struct {
     int k1;
 } config_t;
 
-config_t configs_e1[4] = {{4, 4, 4, 2, 2},
-                          {4, 5, 4, 2, 2},
-                          {3, 5, 5, 2, 2},
-                          {4, 4, 4, 3, 2}};
+double voerConfigUit(config_t c, int algo1, int algo2) {
+    double sum = 0;
+    for (int i = 0; i < 100; i++) {
+        int k[2] = {c.k0, c.k1};
+        Aqualin *aq1 =
+            new Aqualin(c.hoogte, c.breedte, c.vormen, 0, k);
+        sum += aq1->speelUitScore(algo1, algo2);
+        delete aq1;
+    }
+    return sum / 100.0f;
+}
+
+void doeExperimentConfig(int algo1, int algo2) {
+    config_t configs[4] = {{4, 4, 4, 2, 2},
+                           {4, 5, 4, 2, 2},
+                           {3, 5, 5, 2, 2},
+                           {4, 4, 4, 3, 2}};
+
+    for (int z = 0; z < 4; z++) {
+        config_t c = configs[z];
+        double gem = voerConfigUit(c, algo1, algo2);
+        cout << "config " << z
+             << ": De gemiddelde score van brian is: " << gem << endl;
+    }
+}
 
 // Voer experiment uit met vier kleine configuraties van spellen,
 // met algoritmes voor grootste cluster en optimaal.
 void doeExperiment1() {
-    for (int z = 0; z < 4; z++) {
-        config_t c = configs_e1[z];
-        double sum = 0;
-
-        for (int i = 0; i < 100; i++) {
-            int k[2] = {c.k0, c.k1};
-            Aqualin *aq1 =
-                new Aqualin(c.hoogte, c.breedte, c.vormen, 0, k);
-            sum += aq1->speelUitScore(2, 1);
-            delete aq1;
-        }
-
-        cout << "config " << z
-             << ": De gemiddelde score van brian is: " << sum / 100.0f
-             << endl;
-    }
+    doeExperimentConfig(AlgoGrootsteCluster, AlgoOptScore);
 }  // doeExperiment1
 
 //*************************************************************************
@@ -268,22 +274,8 @@ void doeExperiment1() {
 // Voer experiment uit met vier kleine configuraties van spellen,
 // met algoritmes met Monte Carlo en optimaal.
 void doeExperiment2() {
-    for (int z = 0; z < 4; z++) {
-        config_t c = configs_e1[z];
-        double sum = 0;
+    doeExperimentConfig(AlgoMonteCarlo, AlgoOptScore);
 
-        for (int i = 0; i < 100; i++) {
-            int k[2] = {c.k0, c.k1};
-            Aqualin *aq1 =
-                new Aqualin(c.hoogte, c.breedte, c.vormen, 0, k);
-            sum += aq1->speelUitScore(3, 1);
-            delete aq1;
-        }
-
-        cout << "config " << z
-             << ": De gemiddelde score van brian is: " << sum / 100.0f
-             << endl;
-    }
 }  // doeExperiment2
 
 //*************************************************************************
@@ -291,18 +283,9 @@ void doeExperiment2() {
 // Voer experiment uit met een maximale configuratie,
 // voor de twee gretige algoritmes.
 void doeExperiment3() {
-    double sum = 0;
-
-    for (int i = 0; i < 100; i++) {
-        int k[2] = {5, 5};
-        Aqualin *aq1 = new Aqualin(10, 10, 10, 0, k);
-        sum += aq1->speelUitScore(2, 3);
-        delete aq1;
-    }
-
-    cout << "De gemiddelde score van brian is: " << sum / 100.0f
-         << endl;
-
+    double gem = voerConfigUit({10, 10, 10, 5, 5},
+                               AlgoGrootsteCluster, AlgoMonteCarlo);
+    cout << "De gemiddelde score van brian is: " << gem << endl;
 }  // doeExperiment3
 
 //*************************************************************************

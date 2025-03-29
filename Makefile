@@ -1,4 +1,4 @@
-CC = g++ 
+CC = g++ -g
 
 CompileParms = -c -Wall -std=c++11 -O3
 

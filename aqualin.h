@@ -41,9 +41,6 @@ class Cluster {
     int tellers[MaxDimensie * MaxDimensie];
     int waardes[MaxDimensie * MaxDimensie];
 
-    int breedte;
-    int hoogte;
-
     int aantal = 0;
     int grootste = 0;
 
@@ -56,6 +53,7 @@ class Cluster {
     void zet(int p1, int p2);
     int waarde_grootste(void);
     int waarde_kwadraat(void);
+    void laat_zien(void);
 };
 
 class Aqualin {
@@ -248,13 +246,12 @@ class Aqualin {
     void init_bord(int hoogte, int breedte, int aantal_vormen,
                    int leg_op_bord, int formaat_kleuren,
                    int formaat_vormen);
-    void init_lut_steen(int hoogte, int breedte, int aantal_vormen,
-                        int aantal_kleuren);
+    void init_lut_steen(int aantal_vormen, int aantal_kleuren);
 
     // All assigned memory.
     steen_t
         hash_naar_steen_storage[MaxKleurenVormen * MaxKleurenVormen +
-                                1];
+                                1 + MaxDimensie * MaxDimensie];
     pos_t posities[MaxDimensie * MaxDimensie];
     int pot[MaxDimensie * MaxDimensie + MaxKeuzeAantal * 2];
     int bord[MaxDimensie * MaxDimensie];
@@ -263,6 +260,7 @@ class Aqualin {
     Cluster cluster_kleur = Cluster();
     Cluster cluster_vorm = Cluster();
 
+    int neg_counter = 0;
     // Variables
     int hoogte = 0;
     int breedte = 0;
@@ -287,9 +285,10 @@ class Aqualin {
 
     inline int lees_steen(pos_t pos);
     inline void leg_steen(pos_t pos, int steen);
-    inline void verwijder_steel(pos_t pos);
+    inline void verwijder_steen(pos_t pos);
 
     inline pair<bool, bool> zijn_verbonden(int pos1, int pos2);
+    void maak_buur(int p, int b);
     void verbind_buur(int p, int b);
 
     bool doe_zet(int steen);
