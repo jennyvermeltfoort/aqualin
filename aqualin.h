@@ -6,17 +6,28 @@
 #include "constantes.h"
 using namespace std;
 
-typedef enum : bool {
-    speler_kleur = 0,
-    speler_vorm = 1,
-} speler_e;
-
 class Hand {
    private:
     bool heeft_opslag[MaxKleurenVormen * MaxKleurenVormen + 1];
+
+    /**
+     * @brief Map een steen aan of de speler deze in zijn hand heeft.
+     */
     bool *heeft;
+
+    /**
+     * @brief Map een index aan een steen in de hand van de speler.
+     */
     int hand[MaxKeuzeAantal];
+
+    /**
+     * @brief Map een steen aan een index voor hand[].
+     */
     int index[MaxKleurenVormen * MaxKleurenVormen];
+
+    /**
+     * @brief Een lijst van vrije indexes.
+     */
     int vrij[MaxKeuzeAantal];
 
     int vrij_index = 0;
@@ -24,35 +35,169 @@ class Hand {
     int formaat = MaxKeuzeAantal;
 
    public:
+    /**
+     * @brief Beheerd de status van een hand van de speler.
+     */
     Hand(void);
+
+    /**
+     * @brief Geef de speler een steen. Er wordt niet gecontroleerd of
+     * de hand van de speler vol is. Er wordt ook niet gecontroleerd
+     * of de speler de steen al heeft; voorkom dit.
+     * @param steen De hash van de steen.
+     */
     void geef_steen(int steen);
+
+    /**
+     * @brief Neem een steen uit de hand van de speler. Er wordt ook
+     * niet gecontroleerd of de speler de steen al heeft; voorkom dit.
+     * @param steen De hash van de steen.
+     */
     void neem_steen(int steen);
+
+    /**
+     * @brief Heeft de hand de steen.
+     * @param steen De hash van de steen.
+     * @return true De hand heeft de steen.
+     * @return false De hand heeft niet de steen.
+     */
     bool heeft_steen(int steen);
+
+    /**
+     * @brief Lees steen op index van hand[].
+     * @param i De index.
+     * @return int De hash van de steen.
+     */
     int lees_steen(int i);
+
+    /**
+     * @brief De hoeveelheid stenen in de hand.
+     * @return int Aantal stenen.
+     */
     int lees_aantal(void);
+
+    /**
+     * @brief Lees het formaat van de hand.
+     * @return int Het formaat.
+     */
     int lees_formaat(void);
+
+    /**
+     * @brief Zet het formaat van de hand, default is MaxKeuzeAantal.
+     * @param _formaat Het formaat.
+     */
     void zet_formaat(int _formaat);
+
+    /**
+     * @brief Print de hand.
+     * @param hash_naar_steen De map van een hash van een steen naar
+     * steen_t.
+     */
     void laat_zien(steen_t *hash_naar_steen);
 };
 
 class Cluster {
    private:
+    /**
+     * @brief Een 2d matrix van pointer waardes. Hier worden posities
+     * gemapped aan een pointer die naar de index waarde van de
+     * cluster verwijzen. Dit is handig wanneer twee clusters worden
+     * verbonden, aangezien je twee cluster gemakkelijk kunt verbinden
+     * met *cluster_1 = *cluster_2, zonder ingewikkelde poespas.
+     */
     int *clusters[MaxDimensie * MaxDimensie];
+
+    /**
+     * @brief Een 2d matrix die een cluster index mapped aan een
+     * counter.
+     */
     int tellers[MaxDimensie * MaxDimensie];
+
+    /**
+     * @brief Een 2d matrix die bestaat uit alle cluster indexes.
+     */
     int waardes[MaxDimensie * MaxDimensie];
 
+    /**
+     * @brief Het aantal gemaakt clusters.
+     */
     int aantal = 0;
+
+    /**
+     * @brief De index van de cluster waar teller[index] het grootste
+     * is.
+     */
     int grootste = 0;
 
    public:
+    /**
+     * @brief Een cluster is een set van posities die een pointer
+     * delen naar een geindexeerde waarde. Wanneer een cluster met een
+     * ander cluster word verbonden door een verbindende steen zal de
+     * index waarde van een van de clusters worden veranderd zodat
+     * deze gelijk is aan de index van de andere cluster. Tijdens het
+     * maken van verbindingen worden in tellers[] de hoeveelheid
+     * stenen in een cluster bepaald. `grootste` bevat de index waarde
+     * van het grootste cluster.
+     */
     Cluster();
+
+    /**
+     * @brief Verbind twee clusters met elkaar. `c2` is master.
+     * @param c1 cluster 1.
+     * @param c2 cluster 2.
+     */
     void verbind(int *c1, int *c2);
-    void verhoog(int waarde);
+
+    /**
+     * @brief Verhoog de teller van de opgegeven cluster index.
+     * @param waarde de index waarde van de cluster.
+     */
+    void verhoog(int index);
+
+    /**
+     * @brief Maak een cluster op posities `p`.
+     * @param p de positie.
+     */
     void maak(int p);
+
+    /**
+     * @brief Reset de set van clusters.
+     * @param hoogte de hoogte van het bord voor de volgende
+     * berekening.
+     * @param breedte de breedte van het bord voor de volgende
+     * bereking.
+     */
     void reset(int hoogte, int breedte);
+
+    /**
+     * @brief Combineer de cluster van `p1` en `p2`. Wanneer het
+     * cluster van `p1` niet bestaat zal deze aan het eind van deze
+     * functie gelijk zijn met `p2`. Wanneer het cluster van `p1` wel
+     * bestaat zal `p1` met `p2` verbonden worden via verbind(), met
+     * `p2` als master.
+     * @param p1
+     * @param p2
+     */
     void zet(int p1, int p2);
+
+    /**
+     * @brief Lees de teller van de grootste cluster.
+     * @return int de hoeveelheid stenen van het grootste cluster.
+     */
     int waarde_grootste(void);
+
+    /**
+     * @brief Bereken de sum van kwadraten van alle clusters, i.e.
+     * c1^2 + c2^2 + c3^2 + ... + c_n^2 = sum
+     * met n = aantal, en c_x != 0.
+     * @return int De sum van kwadraten van alle clusters.
+     */
     int waarde_kwadraat(void);
+
+    /**
+     * @brief Print de huidige cluster stand.
+     */
     void laat_zien(void);
 };
 
@@ -241,61 +386,273 @@ class Aqualin {
     int speelUitScore(int algo1, int algo2);
 
    private:
-    // Initializers
-    inline void init_pot(int hoogte, int breedte);
-    void init_bord(int hoogte, int breedte, int aantal_vormen,
-                   int leg_op_bord, int formaat_kleuren,
-                   int formaat_vormen);
-    void init_lut_steen(int aantal_vormen, int aantal_kleuren);
-
-    // All assigned memory.
+    /**
+     * @brief Hash van steen gemapped aan steen_t.
+     */
     steen_t
         hash_naar_steen_storage[MaxKleurenVormen * MaxKleurenVormen +
                                 1 + MaxDimensie * MaxDimensie];
+
+    /**
+     * @brief y * breedte + x gemapped aan pos_t.
+     */
     pos_t posities[MaxDimensie * MaxDimensie];
+
+    /**
+     * @brief De pot met stenen. Padded met GeenStenen (steen < 0).
+     */
     int pot[MaxDimensie * MaxDimensie + MaxKeuzeAantal * 2];
+
+    /**
+     * @brief Het bord.
+     */
     int bord[MaxDimensie * MaxDimensie];
+
+    /**
+     * @brief Hand van speler "kleuren".
+     */
     Hand hand_kleuren = Hand();
+
+    /**
+     * @brief Hand van speler "vormen".
+     */
     Hand hand_vormen = Hand();
+
+    /**
+     * @brief Cluster voor cluster berekingen van speler "kleuren".
+     */
     Cluster cluster_kleur = Cluster();
+
+    /**
+     * @brief Cluster voor cluster berekingen van speler "vormen".
+     */
     Cluster cluster_vorm = Cluster();
 
-    int neg_counter = 0;
-    // Variables
-    int hoogte = 0;
-    int breedte = 0;
+    /**
+     * @brief Index van de pot voor de huidige stand.
+     */
     int pot_index = 0;
-    int pot_index_start = 0;
-    int leg_op_bord = 0;
-    int aantal_vormen = 0;
+
+    /**
+     * @brief Index van de huidige positie volgorde voor de huidige
+     * stand.
+     */
     int positie_index = 0;
-    steen_t *hash_naar_steen = nullptr;
+
+    /**
+     * @brief De start van de pot nadat de stenen aan het begin op het
+     * bord zijn gelegd.
+     */
+    int pot_index_start = 0;
+
+    /**
+     * @brief Aantal stenen wat aan het begin op het bord wordt
+     * gelegd.
+     */
+    int leg_op_bord = 0;
+
+    /**
+     * @brief Huidige actieve speler.
+     */
     speler_e speler_actief = speler_kleur;
+
+    /**
+     * @brief speler_e gemapped aan de bijbehorde hand.
+     * speler_kleur => hand_kleuren.
+     * speler_vorm => hand_kleuren.
+     */
     Hand *hand_speler[2] = {0};
+
+    /**
+     * @brief speler_e gemapped aan de bijbehorde cluster.
+     * speler_kleur => cluster_kleuren.
+     * speler_vorm => cluster_kleuren.
+     */
     Cluster *cluster_speler[2];
 
+    int hoogte = 0;
+    int breedte = 0;
+    int aantal_vormen = 0;
+    int neg_counter = 0;
+    steen_t *hash_naar_steen = nullptr;
+
+    /**
+     * @brief Initializeer de pot.
+     * @param hoogte De hoogte van het bord.
+     * @param breedte De breedte van het bord.
+     */
+    inline void init_pot(int hoogte, int breedte);
+
+    /**
+     * @brief Initializeer het bord.
+     * @param hoogte De hoogte van het bord.
+     * @param breedte De breedte van het bord.
+     * @param aantal_vormen Het aantal vormen.
+     * @param leg_op_bord Hoeveel stenen er aan het begin op het bord
+     * moeten worden gelegd.
+     * @param formaat_kleuren Het formaat van de hand van de speler
+     * "kleuren".
+     * @param formaat_vormen Het formaat van de hand van de speler
+     * "vormen".
+     */
+    void init_bord(int hoogte, int breedte, int aantal_vormen,
+                   int leg_op_bord, int formaat_kleuren,
+                   int formaat_vormen);
+
+    /**
+     * @brief Initializeer de hash naar stenen map.
+     * @param aantal_vormen Het aantal vormen.
+     * @param aantal_kleuren Het aantal kleuren.
+     */
+    void init_lut_steen(int aantal_vormen, int aantal_kleuren);
+
+    /**
+     * @brief Neem de volgende steen uit de pot.
+     * @return int De hash van de steen.
+     */
     inline int pot_volgende(void);
+
+    /**
+     * @brief Geef de vorige steen terug aan de pot.
+     * @return int De hash van de vorige steen.
+     */
     inline int pot_vorige(void);
+
+    /**
+     * @brief Neem de volgende positie van de vulvolgorde.
+     * @return pos_t De positie.
+     */
     inline pos_t positie_volgende(void);
+
+    /**
+     * @brief Neem de vorige positie van de vulvolgorde.
+     * @return pos_t De positie.
+     */
     inline pos_t positie_vorige(void);
 
+    /**
+     * @brief Wissel de actieve speler.
+     */
     inline void speler_wissel(void);
+
+    /**
+     * @brief Neem een steen uit de pot en geeft deze aan `speler`.
+     * Controlleert niet of de hand van de speler vol is.
+     * @param speler De speler waarvan de steen in de hand moet
+     * vallen.
+     */
     inline void speler_pot_neem(speler_e speler);
+
+    /**
+     * @brief Geef de vorige steen terug aan de pot en neem deze uit
+     * de `speler` hand. Controlleert niet of de speler de steen
+     * heeft.
+     * @param speler De speler waar de steen in de hand ligt.
+     */
     inline void speler_pot_terug(speler_e speler);
 
+    /**
+     * @brief Lees steen die op positie `pos` van het bord ligt.
+     * @param pos De positie.
+     * @return int De hash van de steen.
+     */
     inline int lees_steen(pos_t pos);
+
+    /**
+     * @brief Plaats een `steen` op positie `pos` op het bord.
+     * @param pos De positie.
+     * @param steen De hash van de steen.
+     */
     inline void leg_steen(pos_t pos, int steen);
+
+    /**
+     * @brief Verwijder de steen op `pos` van het bord.
+     * @param pos De positie.
+     */
     inline void verwijder_steen(pos_t pos);
 
-    inline pair<bool, bool> zijn_verbonden(int pos1, int pos2);
-    void maak_buur(int p, int b);
-    void verbind_buur(int p, int b);
-
+    /**
+     * @brief Doet hetzelfde als doeZet, maar neemt de steen als hash
+     * als input.
+     * @param steen hash van de steen.
+     * @return true Zet gemaakt.
+     * @return false Zet niet gemaakt.
+     */
     bool doe_zet(int steen);
 
-    void bereken_score(void);
+    /**
+     * @brief Bepaald of de twee stenen op het bord op posities `pos1`
+     * en `pos2` hetzelfde zijn; voor kleur en vorm apart.
+     * @param pos1 Positie 1.
+     * @param pos2 Positie 2.
+     * @return pair<bool, bool> first: De twee stenen hebben de kleur
+     * gemeen. second: De twee stenen hebben de vorm gemeen.
+     */
+    inline pair<bool, bool> zijn_verbonden(int pos1, int pos2);
+
+    /**
+     * @brief Controleert of de twee posities met elkaar zijn
+     * verbonden. Zo ja, verbind twee posities op het bord met elkaar
+     * met de Cluster implementatie. Zo nee, dan word er voor positie
+     * `p` een cluster index aangemaakt. Het idee hierachter is dat
+     * dit voorbereiding is voor de volgende iteratie binnen
+     * bereken_score. In Cluster::zet(p1, p2) wordt namelijk niet
+     * gecontrolleerd of deze cluster een nullptr (cluster van p2) is,
+     * aangezien hier branching zoveel mogelijk verkomen moet worden
+     * (vanwege optimalizatie).
+     * @param p Positie `p`
+     * @param b Een buur van positie `p`.
+     */
+    void verbind_buur(int p, int b);
+
+    /**
+     * @brief Ga over het huidige bord en bepaal alle clusters. Zie
+     * Cluster implementatie voor meer informatie. berkeken_clusters
+     * gaat van links boven naar rechts onder over het bord en
+     * gaandeweg maakt het of verbind het clusters met elkaar. De
+     * score kan hierna opgehaald worden met de relevante clusters.
+     * Deze implementatie reset de clusters aan het begin, dus haal
+     * eerst de score op voordat deze opnieuw word gecalled.
+     */
+    void bereken_clusters(void);
+
+    /**
+     * @brief Zie OptScore, dit is een helper functie.
+     * @return pair<int, int> De beste zet.
+     */
     pair<int, int> opt_score(void);
+
+    /**
+     * @brief Zie OptScore, dit is een helper functie.
+     * @param optZet De beste zet.
+     * @param aantalStanden De hoeveelheid leaves van de
+     * actie-toestand boom. ((k0*(p/2)) * (k1 * (p/2)) * k0! * k1!) /
+     * (n - m)
+     *
+     * 1/(n-m) is een correctie voor wanneer het spel eerder stopt
+     * wanneer een van de spelers geen stenen meer heeft, wat voorkomt
+     * wanneer de formaat van de twee handen een verschil van groter
+     * dan 3 heeft.
+     *
+     * Met p de aantal stenen in de pot, m de hoeveelheid stenen
+     * gelegd in eindstand, en n het totaal aantal te spelen stenen.
+     *
+     * n = hoogte * breedte - leg_op_bord
+     * p = n - k0 - k1
+     *
+     * m is te berekenen door: (floor en ceil omdat bij een oneven p
+     * brian een steen meer krijgt)
+     * m = 2k0 + ceil(p/2) * 2  bij k0 < k1
+     * m = 2k1 + floor(p/2) * 2 + 1  bij k0 > k1 (brian speel 1x meer)
+     * m = k0 + k1 + p     bij k0 = k1
+     * @return int
+     */
     int opt_score(pair<int, int> &optZet, long long &aantalStanden);
+
+    /**
+     * @brief Zie bepaalZetMonteCarlo, dit is een helper functie.
+     * @return int hash van de steen van de beste zet.
+     */
     int monte_carlo();
 };
 

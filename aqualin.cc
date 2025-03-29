@@ -59,9 +59,14 @@ Aqualin::Aqualin() {}  // default constructor
 void Aqualin::init_lut_steen(int _aantal_vormen, int aantal_kleuren) {
     hash_naar_steen =
         &hash_naar_steen_storage[MaxDimensie * MaxDimensie];
+
+    // Aangezien alle GeenStenen in de pot uniek zijn word hiervoor
+    // ook een unieke hash naar steen map gemaakt. Zie init_bord()
+    // voor meer info.
     for (int i = MaxDimensie * MaxDimensie * -1; i < 0; i++) {
         hash_naar_steen[i] = {i, i};
     }
+
     for (int k = 0; k < aantal_kleuren; k++) {
         for (int v = 0; v < _aantal_vormen; v++) {
             hash_naar_steen[k * _aantal_vormen + v] = {k, v};
@@ -75,7 +80,7 @@ inline void Aqualin::init_pot(int _hoogte, int _breedte) {
         pot[i] = -1;
         // padd de pot met lege stenen, (hoogte * breedte) / 2 formaat
         // van padding ie groote van het bord gedeeld door het aantal
-        // handen.
+        // handen. Voorkomt extra checks in pot_neem.
     }
 }
 
@@ -96,6 +101,11 @@ void Aqualin::init_bord(int _hoogte, int _breedte, int _aantal_vormen,
     hand_speler[speler_kleur] = &hand_kleuren;
     hand_speler[speler_vorm] = &hand_vormen;
 
+    // Alle GeenStenen zijn uniek op het bord om
+    // de cluster bereking efficienter te maken.
+    // Voorkomt namelijk een extra if statement
+    // in de bereken_clusters loop (geen steen != -1 controle
+    // noodzakelijk).
     neg_counter = _hoogte * breedte * -1;
     for (int i = _hoogte * breedte - 1; i >= 0; i--) {
         pos_t p = posities[i];
@@ -175,11 +185,12 @@ inline void Aqualin::speler_pot_terug(speler_e speler) {
 
 inline void Aqualin::leg_steen(pos_t pos, int steen) {
     bord[breedte * pos.second + pos.first] = steen;
-    neg_counter--;
+    neg_counter--;  // zie init_bord voor meer info.
 }
 
 inline void Aqualin::verwijder_steen(pos_t pos) {
-    bord[breedte * pos.second + pos.first] = neg_counter++;
+    bord[breedte * pos.second + pos.first] =
+        neg_counter++;  // zie init_bord voor meer info.
 }
 
 inline int Aqualin::lees_steen(pos_t pos) {
@@ -317,17 +328,7 @@ bool Aqualin::unDoeZet() {
 
 //*************************************************************************
 
-Cluster::Cluster() {
-    // Een cluster is een set van posities die een pointer delen naar
-    // een geindexeerde waarde. Wanneer een cluster met een ander
-    // cluster word verbonden door een verbindende steen zal de index
-    // waarde van een van de clusters worden veranderd zodat deze
-    // gelijk is aan de index van de andere cluster.
-    // Tijdens het maken van verbindingen worden in tellers[] de
-    // hoeveelheid stenen in een cluster bepaald. "grootste" bevat de
-    // index waarde van de grootste cluster.=
-    reset(MaxDimensie, MaxDimensie);
-}
+Cluster::Cluster() { reset(MaxDimensie, MaxDimensie); }
 
 void Cluster::reset(int hoogte, int breedte) {
     for (int i = 0; i < (hoogte * breedte); i++) {
@@ -339,10 +340,10 @@ void Cluster::reset(int hoogte, int breedte) {
     aantal = 0;
 }
 
-void Cluster::verhoog(int waarde) {
-    tellers[waarde]++;
-    if (tellers[waarde] > tellers[grootste]) {
-        grootste = waarde;
+void Cluster::verhoog(int index) {
+    tellers[index]++;
+    if (tellers[index] > tellers[grootste]) {
+        grootste = index;
     }
 }
 
@@ -413,7 +414,8 @@ void Aqualin::verbind_buur(int p, int b) {
 }
 
 //*************************************************************************
-void Aqualin::bereken_score(void) {
+void Aqualin::bereken_clusters(void) {
+    // Complexiteit van O(hoogte * breedte * 2)
     cluster_kleur.reset(hoogte, breedte);
     cluster_vorm.reset(hoogte, breedte);
 
@@ -442,7 +444,7 @@ int Aqualin::opt_score(pair<int, int> &optZet,
     int hscore = -__INT_MAX__;
 
     if (eindstand()) {
-        bereken_score();
+        bereken_clusters();
         aantalStanden++;
         return cluster_speler[speler_actief]->waarde_grootste() -
                cluster_speler[!speler_actief]->waarde_grootste();
@@ -500,7 +502,7 @@ pair<int, int> Aqualin::bepaalZetGrootsteCluster() {
         int steen = hand_speler[speler]->lees_steen(i);
 
         if (doe_zet(steen)) {
-            bereken_score();
+            bereken_clusters();
             int grootste_waarde =
                 cluster_speler[speler]->waarde_grootste();
             int waarde_kwadraat =
@@ -522,7 +524,7 @@ pair<int, int> Aqualin::bepaalZetGrootsteCluster() {
 
 int Aqualin::monte_carlo() {
     if (eindstand()) {
-        bereken_score();
+        bereken_clusters();
         return cluster_speler[speler_actief]->waarde_grootste() -
                cluster_speler[!speler_actief]->waarde_grootste();
     }
@@ -591,7 +593,7 @@ int Aqualin::speelUitScore(int algo1, int algo2) {
         aantal_zetten++;
     }
 
-    bereken_score();
+    bereken_clusters();
 
     for (int i = 0; i < aantal_zetten; i++) {
         unDoeZet();

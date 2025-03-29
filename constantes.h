@@ -13,8 +13,8 @@ const int AlgoOptScore = 1;
 const int AlgoGrootsteCluster = 2;
 const int AlgoMonteCarlo = 3;
 
-const int MaxDimensie = 10;  // maximaal aantal rijen en maximaal
-                             // aantal kolommen op het bord
+const int MaxDimensie = 10;       // maximaal aantal rijen en maximaal
+                                  // aantal kolommen op het bord
 const int MaxKleurenVormen = 10;  // maximaal aantal kleuren of
                                   // verschillende vormen
 const int MaxKeuzeAantal =
@@ -23,5 +23,10 @@ const int Leeg = -1;  // een niet-geldig nummer voor kleur of vorm
 const int NrSimulaties = 100;  // voor Monte Carlo simulatie
 const pair<int, int> GeenSteen =
     make_pair(-1, -1);  // ongeldige steen
+
+typedef enum : bool {
+    speler_kleur = 0,
+    speler_vorm = 1,
+} speler_e;
 
 #endif
