@@ -400,24 +400,6 @@ void Aqualin::verbind_buur(int p, int b) {
 
 //*************************************************************************
 void Aqualin::bereken_score(void) {
-    // maak clusters aan voor het huidige bord.
-    // O(k+n), misschien O(k+n*4), met k het aantal clusters van de
-    // vorige iteratie (reset), met n aantal standen, 4 voor 4x
-    // verbind_buur(). Maar de complexiteit verteld hier niet het
-    // volledige verhaal. Ik verwacht dat een verbind_buur() ongeveer
-    // 14 cycles cost, maar de cpu doet hier waarschijnlijk wat tricks
-    // waardoor het niet exact 14 * 4 cycles wordt. Ook zorgt de data
-    // structuur van alle informatie ervoor dat alles in de L1 cache
-    // komt. Reads zijn daarbij mogelijk ongeveer 1/10de van wat een
-    // andere implementatie had kunnen zijn, bijvoorbeeld bij een
-    // onderliggende linked list als data structuur. Gebruik makende
-    // van de "profiling" informatie in main(), optimale score, doet
-    // de totale optScore code gemiddeld ongeveer 3-2 cycles per
-    // stand, ervan uitgaande dat CLOCKS_PER_SEC accuraat is.
-    // - 16777216 standen in 10.7 sec, ie 10702106 cycles, gem 1.5
-    // cycles / stand.
-    // - 93312 standen in 0.03 sec, ie 31529 cycles, gem
-    // 3 cycles/stand.
     cluster_kleur.reset(hoogte, breedte);
     cluster_vorm.reset(hoogte, breedte);
 
@@ -434,6 +416,7 @@ void Aqualin::bereken_score(void) {
                      p + 1 + breedte);  // onder van rechtse kolom
     }
 }
+int biggest = -10;
 
 int Aqualin::opt_score(pair<int, int> &optZet,
                        long long &aantalStanden) {
@@ -531,7 +514,6 @@ int Aqualin::monte_carlo() {
     // Hand::lees_aantal geeft alleen het aantal terug, niet welke
     // indexes van Hand::hand vrij zijn.
     int steen = -1;
-
     while (steen == -1) {
         int z = rand() % hand_speler[speler_actief]->lees_formaat();
         steen = hand_speler[speler_actief]->lees_steen(z);
@@ -562,7 +544,7 @@ pair<int, int> Aqualin::bepaalZetMonteCarlo() {
             for (int i = 0; i < 100; i++) {
                 sum += -monte_carlo();
             }
-            double gem = sum / 100.0;
+            double gem = sum / 100.0f;
             if (gem > hgem) {
                 hgem = gem;
                 zet = hash_naar_steen[steen];
@@ -580,29 +562,24 @@ typedef pair<int, int> (Aqualin::*algo_t)(void);
 
 int Aqualin::speelUitScore(int algo1, int algo2) {
     int aantal_zetten = 0;
-    speler_e speler = speler_actief;
     algo_t algos[3] = {&Aqualin::opt_score,
                        &Aqualin::bepaalZetGrootsteCluster,
                        &Aqualin::bepaalZetMonteCarlo};
     algo_t speler_algo[2] = {algos[algo1 - 1], algos[algo2 - 1]};
 
     while (!eindstand()) {
-        aantal_zetten++;
-
         steen_t zet = (this->*speler_algo[speler_actief])();
-        if (!doeZet(zet.first, zet.second)) {
-            cout << "Iets ging er fout!!" << endl;
-            break;
-        }
+        doeZet(zet.first, zet.second);
+        aantal_zetten++;
     }
 
     bereken_score();
-    int score = cluster_speler[speler]->waarde_grootste() -
-                cluster_speler[!speler]->waarde_grootste();
 
     for (int i = 0; i < aantal_zetten; i++) {
         unDoeZet();
     }
 
-    return score;
+    return cluster_speler[speler_actief]->waarde_grootste() -
+           cluster_speler[!speler_actief]->waarde_grootste();
+    ;
 }  // speelUitScore
