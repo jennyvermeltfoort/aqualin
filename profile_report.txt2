@@ -1,0 +1,245 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 55.52      3.07     3.07 1006632960     0.00     0.00  Aqualin::verbind_buur(int, int)
+ 22.60      4.32     1.25 16777216     0.00     0.00  Aqualin::bereken_clusters()
+  9.58      4.85     0.53 333317826     0.00     0.00  Cluster::zet(int, int)
+  4.34      5.09     0.24 100663294     0.00     0.00  Aqualin::doe_zet(int)
+  4.34      5.33     0.24        1     0.24     5.53  Aqualin::opt_score(std::pair<int, int>&, long long&)
+  3.62      5.53     0.20 67108862     0.00     0.00  Aqualin::unDoeZet()
+  0.00      5.53     0.00        4     0.00     0.00  Hand::laat_zien(std::pair<int, int>*)
+  0.00      5.53     0.00        2     0.00     0.00  keuzeUitMenu()
+  0.00      5.53     0.00        2     0.00     0.00  Aqualin::drukAf()
+  0.00      5.53     0.00        1     0.00     5.53  roepOptScoreAan(Aqualin*)
+  0.00      5.53     0.00        1     0.00     5.53  doeSpel(Aqualin*)
+  0.00      5.53     0.00        1     0.00     5.53  hoofdmenu()
+  0.00      5.53     0.00        1     0.00     0.00  Aqualin::leesInSpel(char const*)
+  0.00      5.53     0.00        1     0.00     0.00  Aqualin::init_lut_steen(int, int)
+  0.00      5.53     0.00        1     0.00     0.00  Aqualin::optScore(std::pair<int, int>&, long long&)
+  0.00      5.53     0.00        1     0.00     0.00  Aqualin::eindstand()
+  0.00      5.53     0.00        1     0.00     0.00  Aqualin::init_bord(int, int, int, int, int, int)
+  0.00      5.53     0.00        1     0.00     0.00  Aqualin::Aqualin()
+  0.00      5.53     0.00        1     0.00     0.00  Aqualin::~Aqualin()
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.18% of 5.53 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]    100.0    0.00    5.53                 main [1]
+                0.00    5.53       1/1           hoofdmenu() [4]
+-----------------------------------------------
+                0.00    5.53       1/1           doeSpel(Aqualin*) [3]
+[2]    100.0    0.00    5.53       1         roepOptScoreAan(Aqualin*) [2]
+                0.24    5.29       1/1           Aqualin::opt_score(std::pair<int, int>&, long long&) [5]
+                0.00    0.00       1/1           Aqualin::optScore(std::pair<int, int>&, long long&) [22]
+-----------------------------------------------
+                0.00    5.53       1/1           hoofdmenu() [4]
+[3]    100.0    0.00    5.53       1         doeSpel(Aqualin*) [3]
+                0.00    5.53       1/1           roepOptScoreAan(Aqualin*) [2]
+                0.00    0.00       2/2           keuzeUitMenu() [18]
+                0.00    0.00       2/2           Aqualin::drukAf() [19]
+                0.00    0.00       1/1           Aqualin::eindstand() [23]
+-----------------------------------------------
+                0.00    5.53       1/1           main [1]
+[4]    100.0    0.00    5.53       1         hoofdmenu() [4]
+                0.00    5.53       1/1           doeSpel(Aqualin*) [3]
+                0.00    0.00       1/1           Aqualin::Aqualin() [25]
+                0.00    0.00       1/1           Aqualin::leesInSpel(char const*) [20]
+                0.00    0.00       1/1           Aqualin::~Aqualin() [26]
+-----------------------------------------------
+                             67108862             Aqualin::opt_score(std::pair<int, int>&, long long&) [5]
+                0.24    5.29       1/1           roepOptScoreAan(Aqualin*) [2]
+[5]    100.0    0.24    5.29       1+67108862 Aqualin::opt_score(std::pair<int, int>&, long long&) [5]
+                1.25    3.60 16777216/16777216     Aqualin::bereken_clusters() [6]
+                0.24    0.00 100663294/100663294     Aqualin::doe_zet(int) [9]
+                0.20    0.00 67108862/67108862     Aqualin::unDoeZet() [10]
+                             67108862             Aqualin::opt_score(std::pair<int, int>&, long long&) [5]
+-----------------------------------------------
+                1.25    3.60 16777216/16777216     Aqualin::opt_score(std::pair<int, int>&, long long&) [5]
+[6]     87.7    1.25    3.60 16777216         Aqualin::bereken_clusters() [6]
+                3.07    0.26 1006632960/1006632960     Aqualin::verbind_buur(int, int) [7]
+                0.27    0.00 172234636/333317826     Cluster::zet(int, int) [8]
+-----------------------------------------------
+                3.07    0.26 1006632960/1006632960     Aqualin::bereken_clusters() [6]
+[7]     60.1    3.07    0.26 1006632960         Aqualin::verbind_buur(int, int) [7]
+                0.26    0.00 161083190/333317826     Cluster::zet(int, int) [8]
+-----------------------------------------------
+                0.26    0.00 161083190/333317826     Aqualin::verbind_buur(int, int) [7]
+                0.27    0.00 172234636/333317826     Aqualin::bereken_clusters() [6]
+[8]      9.6    0.53    0.00 333317826         Cluster::zet(int, int) [8]
+-----------------------------------------------
+                0.24    0.00 100663294/100663294     Aqualin::opt_score(std::pair<int, int>&, long long&) [5]
+[9]      4.3    0.24    0.00 100663294         Aqualin::doe_zet(int) [9]
+-----------------------------------------------
+                0.20    0.00 67108862/67108862     Aqualin::opt_score(std::pair<int, int>&, long long&) [5]
+[10]     3.6    0.20    0.00 67108862         Aqualin::unDoeZet() [10]
+-----------------------------------------------
+                0.00    0.00       4/4           Aqualin::drukAf() [19]
+[17]     0.0    0.00    0.00       4         Hand::laat_zien(std::pair<int, int>*) [17]
+-----------------------------------------------
+                0.00    0.00       2/2           doeSpel(Aqualin*) [3]
+[18]     0.0    0.00    0.00       2         keuzeUitMenu() [18]
+-----------------------------------------------
+                0.00    0.00       2/2           doeSpel(Aqualin*) [3]
+[19]     0.0    0.00    0.00       2         Aqualin::drukAf() [19]
+                0.00    0.00       4/4           Hand::laat_zien(std::pair<int, int>*) [17]
+-----------------------------------------------
+                0.00    0.00       1/1           hoofdmenu() [4]
+[20]     0.0    0.00    0.00       1         Aqualin::leesInSpel(char const*) [20]
+                0.00    0.00       1/1           Aqualin::init_bord(int, int, int, int, int, int) [24]
+-----------------------------------------------
+                0.00    0.00       1/1           Aqualin::init_bord(int, int, int, int, int, int) [24]
+[21]     0.0    0.00    0.00       1         Aqualin::init_lut_steen(int, int) [21]
+-----------------------------------------------
+                0.00    0.00       1/1           roepOptScoreAan(Aqualin*) [2]
+[22]     0.0    0.00    0.00       1         Aqualin::optScore(std::pair<int, int>&, long long&) [22]
+-----------------------------------------------
+                0.00    0.00       1/1           doeSpel(Aqualin*) [3]
+[23]     0.0    0.00    0.00       1         Aqualin::eindstand() [23]
+-----------------------------------------------
+                0.00    0.00       1/1           Aqualin::leesInSpel(char const*) [20]
+[24]     0.0    0.00    0.00       1         Aqualin::init_bord(int, int, int, int, int, int) [24]
+                0.00    0.00       1/1           Aqualin::init_lut_steen(int, int) [21]
+-----------------------------------------------
+                0.00    0.00       1/1           hoofdmenu() [4]
+[25]     0.0    0.00    0.00       1         Aqualin::Aqualin() [25]
+-----------------------------------------------
+                0.00    0.00       1/1           hoofdmenu() [4]
+[26]     0.0    0.00    0.00       1         Aqualin::~Aqualin() [26]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [18] keuzeUitMenu()         [21] Aqualin::init_lut_steen(int, int) [24] Aqualin::init_bord(int, int, int, int, int, int)
+   [2] roepOptScoreAan(Aqualin*) [6] Aqualin::bereken_clusters() [5] Aqualin::opt_score(std::pair<int, int>&, long long&)
+   [3] doeSpel(Aqualin*)      [19] Aqualin::drukAf()      [25] Aqualin::Aqualin()
+   [4] hoofdmenu()             [9] Aqualin::doe_zet(int)  [26] Aqualin::~Aqualin()
+  [17] Hand::laat_zien(std::pair<int, int>*) [22] Aqualin::optScore(std::pair<int, int>&, long long&) [8] Cluster::zet(int, int)
+  [20] Aqualin::leesInSpel(char const*) [10] Aqualin::unDoeZet()
+   [7] Aqualin::verbind_buur(int, int) [23] Aqualin::eindstand()

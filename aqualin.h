@@ -578,7 +578,8 @@ class Aqualin {
      * @return true Zet gemaakt.
      * @return false Zet niet gemaakt.
      */
-    bool doe_zet(int steen);
+    void doe_zet(int steen);
+    void un_doe_zet(void);
 
     /**
      * @brief Bepaald of de twee stenen op het bord op posities `pos1`

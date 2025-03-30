@@ -295,34 +295,39 @@ bool Aqualin::eindstand() {
 
 //*************************************************************************
 
-bool Aqualin::doe_zet(int steen) {
-    bool heeft = hand_speler[speler_actief]->heeft_steen(steen);
-    if (heeft) {
-        leg_steen(positie_volgende(), steen);
-        hand_speler[speler_actief]->neem_steen(steen);
-        speler_pot_neem(speler_actief);
-        speler_wissel();
-    }
-    return heeft;
+void Aqualin::doe_zet(int steen) {
+    leg_steen(positie_volgende(), steen);
+    hand_speler[speler_actief]->neem_steen(steen);
+    speler_pot_neem(speler_actief);
+    speler_wissel();
 }
 
 bool Aqualin::doeZet(int kleur, int vorm) {
-    return doe_zet(kleur * aantal_vormen + vorm);
+    int steen = kleur * aantal_vormen + vorm;
+    bool heeft = hand_speler[speler_actief]->heeft_steen(steen);
+    if (heeft) {
+        doe_zet(steen);
+    }
+    return heeft;
 }  // doeZet
 
 //*************************************************************************
 
-bool Aqualin::unDoeZet() {
-    if (pot_index == pot_index_start) {
-        return false;  // geen zet gemaakt.
-    }
-
+void Aqualin::un_doe_zet(void) {
     speler_wissel();
     pos_t pos = positie_vorige();
     int steen = lees_steen(pos);
     verwijder_steen(pos);
     speler_pot_terug(speler_actief);
     hand_speler[speler_actief]->geef_steen(steen);
+}
+
+bool Aqualin::unDoeZet() {
+    if (pot_index == pot_index_start) {
+        return false;  // geen zet gemaakt.
+    }
+
+    un_doe_zet();
     return true;
 }  // unDoeZet
 
@@ -444,8 +449,8 @@ int Aqualin::opt_score(pair<int, int> &optZet,
     int hscore = -__INT_MAX__;
 
     if (eindstand()) {
-        bereken_clusters();
         aantalStanden++;
+        bereken_clusters();
         return cluster_speler[speler_actief]->waarde_grootste() -
                cluster_speler[!speler_actief]->waarde_grootste();
     }
@@ -453,14 +458,14 @@ int Aqualin::opt_score(pair<int, int> &optZet,
     for (int i = 0; i < hand_speler[speler_actief]->lees_formaat();
          i++) {
         int steen = hand_speler[speler_actief]->lees_steen(i);
-
-        if (doe_zet(steen)) {
+        if (steen != -1) {
+            doe_zet(steen);
             int score = -opt_score(zet, aantalStanden);
             if (score > hscore) {
                 hscore = score;
                 optZet = hash_naar_steen[steen];
             }
-            unDoeZet();
+            un_doe_zet();
         }
     }
 
@@ -500,8 +505,8 @@ pair<int, int> Aqualin::bepaalZetGrootsteCluster() {
 
     for (int i = 0; i < hand_speler[speler]->lees_formaat(); i++) {
         int steen = hand_speler[speler]->lees_steen(i);
-
-        if (doe_zet(steen)) {
+        if (steen != -1) {
+            doe_zet(steen);
             bereken_clusters();
             int grootste_waarde =
                 cluster_speler[speler]->waarde_grootste();
@@ -513,7 +518,7 @@ pair<int, int> Aqualin::bepaalZetGrootsteCluster() {
                 hkw = waarde_kwadraat;
                 zet = hash_naar_steen[steen];
             }
-            unDoeZet();
+            un_doe_zet();
         }
     }
 
@@ -540,10 +545,10 @@ int Aqualin::monte_carlo() {
     }
 
     int score = 0;
-    if (doe_zet(steen)) {
-        score = -monte_carlo();
-        unDoeZet();
-    }
+    doe_zet(steen);
+    score = -monte_carlo();
+    un_doe_zet();
+
     return score;
 }
 
@@ -558,8 +563,8 @@ pair<int, int> Aqualin::bepaalZetMonteCarlo() {
     for (int i = 0; i < hand_speler[speler_actief]->lees_formaat();
          i++) {
         int steen = hand_speler[speler_actief]->lees_steen(i);
-
-        if (doe_zet(steen)) {
+        if (steen != -1) {
+            doe_zet(steen);
             double sum = 0;
             for (int i = 0; i < 100; i++) {
                 sum += -monte_carlo();
@@ -596,7 +601,7 @@ int Aqualin::speelUitScore(int algo1, int algo2) {
     bereken_clusters();
 
     for (int i = 0; i < aantal_zetten; i++) {
-        unDoeZet();
+        un_doe_zet();
     }
 
     return cluster_speler[speler_actief]->waarde_grootste() -
