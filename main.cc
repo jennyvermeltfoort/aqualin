@@ -250,6 +250,7 @@ double voerConfigUit(config_t c, int algo1, int algo2) {
 }
 
 void doeExperimentConfig(int algo1, int algo2) {
+    clock_t t1, t2;
     config_t configs[4] = {{4, 4, 4, 2, 2},
                            {4, 5, 4, 2, 2},
                            {3, 5, 5, 2, 2},
@@ -257,9 +258,15 @@ void doeExperimentConfig(int algo1, int algo2) {
 
     for (int z = 0; z < 4; z++) {
         config_t c = configs[z];
+        t1 = clock();
         double gem = voerConfigUit(c, algo1, algo2);
+        t2 = clock();
         cout << "config " << z
-             << ": De gemiddelde score van brian is: " << gem << endl;
+             << ": De gemiddelde score van Brian is: " << gem << endl;
+        cout << "Dit kostte " << (t2 - t1) << " clock ticks, ofwel "
+             << (((double)(t2 - t1)) / CLOCKS_PER_SEC) << " seconden."
+             << endl;
+        cout << endl;
     }
 }
 
@@ -283,9 +290,16 @@ void doeExperiment2() {
 // Voer experiment uit met een maximale configuratie,
 // voor de twee gretige algoritmes.
 void doeExperiment3() {
+    clock_t t1, t2;
+    t1 = clock();
     double gem = voerConfigUit({10, 10, 10, 5, 5},
                                AlgoGrootsteCluster, AlgoMonteCarlo);
-    cout << "De gemiddelde score van brian is: " << gem << endl;
+    t2 = clock();
+    cout << "De gemiddelde score van Brian is: " << gem << endl;
+    cout << "Dit kostte " << (t2 - t1) << " clock ticks, ofwel "
+         << (((double)(t2 - t1)) / CLOCKS_PER_SEC) << " seconden."
+         << endl;
+    cout << endl;
 }  // doeExperiment3
 
 //*************************************************************************

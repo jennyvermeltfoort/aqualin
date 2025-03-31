@@ -8,7 +8,8 @@ using namespace std;
 
 class Hand {
    private:
-    bool heeft_opslag[MaxKleurenVormen * MaxKleurenVormen + 1];
+    bool heeft_opslag[MaxDimensie * MaxDimensie / 2 +
+                      MaxKleurenVormen * MaxKleurenVormen + 1];
 
     /**
      * @brief Map een steen aan of de speler deze in zijn hand heeft.
@@ -23,14 +24,19 @@ class Hand {
     /**
      * @brief Map een steen aan een index voor hand[].
      */
-    int index[MaxKleurenVormen * MaxKleurenVormen];
+    int index_opslag[MaxDimensie * MaxDimensie / 2 +
+                     MaxKleurenVormen * MaxKleurenVormen];
+    int *index;
 
     /**
      * @brief Een lijst van vrije indexes.
      */
-    int vrij[MaxKeuzeAantal];
+    int prul[MaxDimensie * MaxDimensie / 2];
+    int pot[MaxDimensie * MaxDimensie / 2];
+    int prul_index = 0;
+    int pot_index = 0;
+    int aantal_pot = 0;
 
-    int vrij_index = 0;
     int aantal = 0;
     int formaat = MaxKeuzeAantal;
 
@@ -40,20 +46,9 @@ class Hand {
      */
     Hand(void);
 
-    /**
-     * @brief Geef de speler een steen. Er wordt niet gecontroleerd of
-     * de hand van de speler vol is. Er wordt ook niet gecontroleerd
-     * of de speler de steen al heeft; voorkom dit.
-     * @param steen De hash van de steen.
-     */
-    void geef_steen(int steen);
-
-    /**
-     * @brief Neem een steen uit de hand van de speler. Er wordt ook
-     * niet gecontroleerd of de speler de steen al heeft; voorkom dit.
-     * @param steen De hash van de steen.
-     */
-    void neem_steen(int steen);
+    void vooruit(int steen);
+    void achteruit(void);
+    void geef_init(int steen);
 
     /**
      * @brief Heeft de hand de steen.

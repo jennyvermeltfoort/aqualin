@@ -10,33 +10,60 @@
 #include "standaard.h"
 
 Hand::Hand(void) {
-    heeft = &heeft_opslag[1];
+    heeft = &heeft_opslag[MaxDimensie * MaxDimensie / 2 + 1];
+    index = &index_opslag[MaxDimensie * MaxDimensie / 2];
+
     heeft[-1] = false;
+
     for (int i = 0; i < MaxKeuzeAantal; i++) {
-        vrij[i] = i;
         hand[i] = -1;
+    }
+
+    // pad de pot met unieke negatieve stenen zodat er geen if
+    // statements nodig zijn in de rest van de code.
+    for (int i = 0; i < MaxDimensie * MaxDimensie / 2; i++) {
+        pot[i] = -(i + 2);  // +2 om -1 voor heeft[-1] false te laten.
     }
 }
 
+inline int min(int a, int b) { return (a < b) ? a : b; }
+
 void Hand::zet_formaat(int _formaat) { formaat = _formaat; }
+void Hand::geef_init(int steen) {
+    if (aantal < formaat) {
+        hand[aantal] = steen;
+        heeft[steen] = true;
+        index[steen] = aantal;
+        aantal++;
+    } else {
+        pot[aantal_pot++] = steen;
+    }
+}
 int Hand::lees_formaat(void) { return formaat; }
-int Hand::lees_aantal(void) { return aantal; }
+int Hand::lees_aantal(void) {
+    int a = formaat + -(pot_index - aantal_pot);
+    return min(a, formaat);
+}
 int Hand::lees_steen(int i) { return hand[i]; }
 
-void Hand::geef_steen(int steen) {
-    int i = vrij[vrij_index++];
-    hand[i] = steen;
-    heeft[steen] = true;
-    index[steen] = i;
-    aantal++;
+void Hand::vooruit(int steen) {
+    int p = pot[pot_index++];  // steen uit pot
+    int i = index[steen];
+    prul[prul_index++] = hand[i];
+    hand[i] = p;
+    index[p] = i;
+    heeft[p] = true;
+    heeft[steen] = false;
 }
 
-void Hand::neem_steen(int steen) {
-    int i = index[steen];
-    vrij[--vrij_index] = i;
-    hand[i] = -1;
-    heeft[steen] = false;
-    aantal--;
+void Hand::achteruit(void) {
+    int p = prul[--prul_index];  // neem uit prullebak.
+    int i = index[p];            // oude index van p.
+    int s = hand[i];             // huidige steen @ oude index van p.
+    heeft[s] = false;
+    heeft[p] = true;
+    hand[i] = p;
+    pot_index--;
 }
 
 bool Hand::heeft_steen(int steen) { return heeft[steen]; }
@@ -44,9 +71,12 @@ bool Hand::heeft_steen(int steen) { return heeft[steen]; }
 void Hand::laat_zien(steen_t *hash_naar_steen) {
     std::cout << "(kleur,vorm):";
     for (int i = 0; i < formaat; i++) {
-        steen_t steen = hash_naar_steen[hand[i]];
-        std::cout << "(" << hand[i] << ": " << steen.first << ","
-                  << steen.second << ")";
+        int s = hand[i];
+        if (s >= 0) {
+            steen_t steen = hash_naar_steen[s];
+            std::cout << "(" << s << ": " << steen.first << ","
+                      << steen.second << ")";
+        }
     }
 }
 
@@ -114,16 +144,24 @@ void Aqualin::init_bord(int _hoogte, int _breedte, int _aantal_vormen,
     init_lut_steen(_aantal_vormen, aantal_kleuren);
 
     for (int i = 0; i < leg_op_bord; i++) {
-        leg_steen(positie_volgende(), pot_volgende());
+        leg_steen(positie_volgende(), pot[pot_index++]);
     }
 
     for (int i = 0; i < hand_kleuren.lees_formaat(); i++) {
-        speler_pot_neem(speler_kleur);
+        hand_kleuren.geef_init(pot[pot_index++]);
     }
 
     for (int i = 0; i < hand_vormen.lees_formaat(); i++) {
-        speler_pot_neem(speler_vorm);
+        hand_vormen.geef_init(pot[pot_index++]);
     }
+
+    bool toggle = 0;  // speler_kleur;
+    for (int i = pot_index; i < _hoogte * _breedte; i++) {
+        hand_speler[toggle]->geef_init(pot[i]);
+        toggle = !toggle;
+    }
+
+    pot_index_start = pot_index;
 }
 
 // Constructor met parameters.
@@ -152,10 +190,6 @@ Aqualin::~Aqualin() {}
 
 //*************************************************************************
 
-inline int Aqualin::pot_volgende(void) { return pot[pot_index++]; }
-
-inline int Aqualin::pot_vorige(void) { return pot[--pot_index]; }
-
 inline pos_t Aqualin::positie_volgende(void) {
     return posities[positie_index++];
 }
@@ -167,20 +201,6 @@ inline pos_t Aqualin::positie_vorige(void) {
 inline void Aqualin::speler_wissel(void) {
     speler_actief =
         (speler_actief == speler_kleur) ? speler_vorm : speler_kleur;
-}
-
-inline void Aqualin::speler_pot_neem(speler_e speler) {
-    int steen = pot_volgende();
-    if (steen != -1) {
-        hand_speler[speler]->geef_steen(steen);
-    }
-}
-
-inline void Aqualin::speler_pot_terug(speler_e speler) {
-    int steen = pot_vorige();
-    if (steen != -1) {
-        hand_speler[speler]->neem_steen(steen);
-    }
 }
 
 inline void Aqualin::leg_steen(pos_t pos, int steen) {
@@ -297,9 +317,9 @@ bool Aqualin::eindstand() {
 
 void Aqualin::doe_zet(int steen) {
     leg_steen(positie_volgende(), steen);
-    hand_speler[speler_actief]->neem_steen(steen);
-    speler_pot_neem(speler_actief);
+    hand_speler[speler_actief]->vooruit(steen);
     speler_wissel();
+    pot_index++;
 }
 
 bool Aqualin::doeZet(int kleur, int vorm) {
@@ -315,11 +335,9 @@ bool Aqualin::doeZet(int kleur, int vorm) {
 
 void Aqualin::un_doe_zet(void) {
     speler_wissel();
-    pos_t pos = positie_vorige();
-    int steen = lees_steen(pos);
-    verwijder_steen(pos);
-    speler_pot_terug(speler_actief);
-    hand_speler[speler_actief]->geef_steen(steen);
+    verwijder_steen(positie_vorige());
+    hand_speler[speler_actief]->achteruit();
+    pot_index--;
 }
 
 bool Aqualin::unDoeZet() {
@@ -458,7 +476,7 @@ int Aqualin::opt_score(pair<int, int> &optZet,
     for (int i = 0; i < hand_speler[speler_actief]->lees_formaat();
          i++) {
         int steen = hand_speler[speler_actief]->lees_steen(i);
-        if (steen != -1) {
+        if (steen >= 0) {
             doe_zet(steen);
             int score = -opt_score(zet, aantalStanden);
             if (score > hscore) {
@@ -505,7 +523,7 @@ pair<int, int> Aqualin::bepaalZetGrootsteCluster() {
 
     for (int i = 0; i < hand_speler[speler]->lees_formaat(); i++) {
         int steen = hand_speler[speler]->lees_steen(i);
-        if (steen != -1) {
+        if (steen >= 0) {
             doe_zet(steen);
             bereken_clusters();
             int grootste_waarde =
@@ -539,7 +557,7 @@ int Aqualin::monte_carlo() {
     // Hand::lees_aantal geeft alleen het aantal terug, niet welke
     // indexes van Hand::hand vrij zijn.
     int steen = -1;
-    while (steen == -1) {
+    while (steen < 0) {
         int z = rand() % hand_speler[speler_actief]->lees_formaat();
         steen = hand_speler[speler_actief]->lees_steen(z);
     }
@@ -563,7 +581,7 @@ pair<int, int> Aqualin::bepaalZetMonteCarlo() {
     for (int i = 0; i < hand_speler[speler_actief]->lees_formaat();
          i++) {
         int steen = hand_speler[speler_actief]->lees_steen(i);
-        if (steen != -1) {
+        if (steen >= 0) {
             doe_zet(steen);
             double sum = 0;
             for (int i = 0; i < 100; i++) {
