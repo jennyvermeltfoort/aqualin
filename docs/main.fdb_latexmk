@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1743418723.4667 "/home/jenny/Projecten/aqualin/docs/main.tex" "main.pdf" "main" 1743418724.12049 0
+["pdflatex"] 1743448070.60457 "/home/jenny/Projecten/aqualin/docs/main.tex" "main.pdf" "main" 1743448071.28676 0
   "/etc/texmf/web2c/texmf.cnf" 1738572647.17301 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/jenny/Projecten/aqualin/docs/main.tex" 1743418722.63118 15736 1e834f2b74cc91fbdbeff237bcebf71e ""
+  "/home/jenny/Projecten/aqualin/docs/main.tex" 1743448069.7618 18697 6cb652f51922f5fadaf3488911dbcb19 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1136768653 3584 402da0b29eafbad07963b1224b222f18 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm" 1136768653 3584 13049b61b922a28b158a38aeff75ee9b ""
@@ -14,7 +14,9 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm1440.tfm" 1136768653 3584 3169d30142b88a27d4ab0e3468e963a2 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm1728.tfm" 1136768653 3584 3c76ccb63eda935a68ba65ba9da29f1a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm2074.tfm" 1136768653 3584 8e2870ec7aa9776f59654942b0923f51 ""
+  "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecti1000.tfm" 1136768653 3072 3bce340d4c075dffe6d4ec732b4c32fe ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ectt0900.tfm" 1136768653 1536 ae7aab2f8a4bc9edfce2899f53ba88c3 ""
+  "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm" 1136768653 1536 06717a2b50de47d4087ac0e6cd759455 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1136768653 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
@@ -121,13 +123,15 @@
   "/usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb" 1636152094 138258 6525c253f16cededa14c7fd0da7f67b2 ""
   "/usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb" 1738572665.03324 136101 f533469f523533d38317ab5729d00c8a ""
   "/usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb" 1738572665.03524 131438 3aa300b3e40e5c8ba7b4e5c6cebc5dd6 ""
+  "/usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb" 1636152094 186554 e8f0fa8ca05e038f257a06405232745f ""
   "/usr/share/texmf/fonts/type1/public/cm-super/sftt0900.pfb" 1738572665.10624 170827 2e4b634de7b58578eae1dc93e51dfe48 ""
+  "/usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb" 1636152094 169201 9ebf99020dde51a5086e186761a34e8f ""
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1738572672.68333 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1738572743 8214218 312678b761c056ef6ef0bdc34acfd4e1 ""
-  "main.aux" 1743418724.05319 2925 89b635fa7cce3475a37bdd5093a24d6f "pdflatex"
-  "main.out" 1743418724.05319 2477 a3fb3baa50eac39542a7e61a168a3e5f "pdflatex"
-  "main.tex" 1743418722.63118 15736 1e834f2b74cc91fbdbeff237bcebf71e ""
+  "main.aux" 1743448071.21483 2925 77b20766c10ac70812cdfa116080ac1a "pdflatex"
+  "main.out" 1743448071.21583 2477 a3fb3baa50eac39542a7e61a168a3e5f "pdflatex"
+  "main.tex" 1743448069.7618 18697 6cb652f51922f5fadaf3488911dbcb19 ""
   (generated)
   "main.aux"
   "main.log"

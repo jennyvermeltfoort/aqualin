@@ -8,12 +8,11 @@ using namespace std;
 
 class Hand {
    private:
-    bool heeft_opslag[MaxDimensie * MaxDimensie / 2 + 1 +
-                      MaxKleurenVormen * MaxKleurenVormen + 1];
-
     /**
      * @brief Map een steen aan of de speler deze in zijn hand heeft.
      */
+    bool heeft_opslag[MaxDimensie * MaxDimensie / 2 + 1 +
+                      MaxKleurenVormen * MaxKleurenVormen + 1];
     bool *heeft;
 
     /**
@@ -29,15 +28,34 @@ class Hand {
     int *index;
 
     /**
-     * @brief Een lijst van vrije indexes.
+     * @brief Een lijst met alle stenen die uit de hand van de speler
+     * zijn gehaald. Dit is een FIFO.
      */
     int prul[MaxDimensie * MaxDimensie / 2 + 1];
-    int pot[MaxDimensie * MaxDimensie / 2 + 1];
     int prul_index = 0;
+
+    /**
+     * @brief Een lijst van alle stenen die speler uit de pot krijgt.
+     * Dit is een omgekeerde FIFO, stenen worden vooraan weggenomen en
+     * komen ook weer vooraan terug.
+     */
+    int pot[MaxDimensie * MaxDimensie / 2 + 1];
     int pot_index = 0;
+
+    /**
+     * @brief Aantal stenen in de pot.
+     */
     int aantal_pot = 0;
 
+    /**
+     * @brief Aantal stenen in de hand. Private, gebruik lees_aantal()
+     * om de werkelijke hoeveelheid te berekenen.
+     */
     int aantal = 0;
+
+    /**
+     * @brief Formaat van de hand, pas aan met zet_formaat();
+     */
     int formaat = MaxKeuzeAantal;
 
    public:
@@ -46,8 +64,27 @@ class Hand {
      */
     Hand(void);
 
+    /**
+     * @brief Neem `steen` uit de hand van de gebruiker en neem een
+     * steen uit de pot. De steen uit de pot komt op de positie van de
+     * weggenomen steen.
+     * @param steen
+     */
     void vooruit(int steen);
+
+    /**
+     * @brief Geef de vorige genomen steen met vooruit() terug aan de
+     * speler op de zelfde positie als waar de steen was weggenomen.
+     * De steen die hiervoor uit de pot is gekomen wordt daarmee
+     * verwijdert.
+     */
     void achteruit(void);
+
+    /**
+     * @brief Initializeer de pot van de hand, door haar steeds stenen
+     * te geven. Maximum is 50 (MaxDimension * Maxdimension / 2);
+     * @param steen
+     */
     void geef_init(int steen);
 
     /**
@@ -387,6 +424,7 @@ class Aqualin {
     steen_t
         hash_naar_steen_storage[MaxKleurenVormen * MaxKleurenVormen +
                                 1 + MaxDimensie * MaxDimensie];
+    steen_t *hash_naar_steen = nullptr;
 
     /**
      * @brief y * breedte + x gemapped aan pos_t.
@@ -469,7 +507,6 @@ class Aqualin {
     int breedte = 0;
     int aantal_vormen = 0;
     int neg_counter = 0;
-    steen_t *hash_naar_steen = nullptr;
 
     /**
      * @brief Initializeer de pot.
@@ -568,12 +605,20 @@ class Aqualin {
 
     /**
      * @brief Doet hetzelfde als doeZet, maar neemt de steen als hash
-     * als input.
+     * als input en controleerd niet of de speler de steen heeft.
      * @param steen hash van de steen.
      * @return true Zet gemaakt.
      * @return false Zet niet gemaakt.
      */
     void doe_zet(int steen);
+
+    /**
+     * @brief Doet hetzelfde als unDoeZEt, maar controleerd niet of er
+     *  zetten zijn gedaan.
+     * @param steen hash van de steen.
+     * @return true Zet gemaakt.
+     * @return false Zet niet gemaakt.
+     */
     void un_doe_zet(void);
 
     /**

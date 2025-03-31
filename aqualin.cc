@@ -10,9 +10,12 @@
 #include "standaard.h"
 
 Hand::Hand(void) {
+    // Maak ruimte voor alle negatieve stenen die mogelijk uit de pot
+    // kunnen komen.
     heeft = &heeft_opslag[MaxDimensie * MaxDimensie / 2 + 1 + 1];
     index = &index_opslag[MaxDimensie * MaxDimensie / 2 + 1];
 
+    // Zet GeenSteen op false.
     heeft[-1] = false;
 
     for (int i = 0; i < MaxKeuzeAantal; i++) {
@@ -42,11 +45,26 @@ void Hand::geef_init(int steen) {
 int Hand::lees_formaat(void) { return formaat; }
 int Hand::lees_aantal(void) {
     int a = formaat + -(pot_index - aantal_pot);
-    return min(a, formaat);
+    return min(a,
+               formaat);  // Aantal is niet eenvoudig bij te houden
+                          // met een counter aangezien de stenen
+                          // uit de pot niet worden gecontroleerd, ze
+                          // kunnen ook GeenSteen (> 0) zijn. Het is
+                          // dus niet zo simpel als aantal-- in
+                          // vooruit() en aantal++ in achteruit().
 }
 int Hand::lees_steen(int i) { return hand[i]; }
 
 void Hand::vooruit(int steen) {
+    // Het idee is dat een steen uit de hand word genomen, deze word
+    // in de prullebak geplaatst. Op dezelfde index komt een nieuwe
+    // steen uit de pot. Dit is altijd een nieuwe steen, de
+    // pot is padded met negatieve stenen. Dit betekend dus dat de
+    // speler ook negatieve stenen ofwel GeenSteen in de hand kan
+    // hebben. Functionaliteit voor GeenSteen is hetzelfde als normale
+    // stenen, dus let hierbij op. GeenSteen zijn daarbij wel uniek,
+    // zodat de index[steen] niet wordt overschreven wanneer de speler
+    // meerdere GeenStenen in de hand heeft.
     int p = pot[pot_index++];  // steen uit pot
     int i = index[steen];
     prul[prul_index++] = hand[i];
@@ -57,6 +75,8 @@ void Hand::vooruit(int steen) {
 }
 
 void Hand::achteruit(void) {
+    // Neemt de steen uit de prullebak en plaatst deze op de index
+    // waar hij vandaan kwam. De steen op deze index wordt verwijderd.
     int p = prul[--prul_index];  // neem uit prullebak.
     int i = index[p];            // oude index van p.
     int s = hand[i];             // huidige steen @ oude index van p.
@@ -383,16 +403,20 @@ void Cluster::zet(int p1, int p2) {
     int *c1 = clusters[p1];
     int *c2 = clusters[p2];
     if (c1 == nullptr) {
-        // cluster bestaat nog niet, dus verbind de positie met het
-        // cluster via de pointer.
+        // cluster p1 bestaat nog niet, dus verbind de positie met het
+        // cluster p2 via de pointer.
         clusters[p1] = c2;
         verhoog(*c2);
     } else if (*c1 != *c2) {
+        // cluster p1 bestaat al wel, dus verbind de twee clusters.
         verbind(c1, c2);
     }
 }
 
 void Cluster::verbind(int *c1, int *c2) {
+    // Een cluster is gewoon een gedeelde pointer, dus de waarde van
+    // deze pointer updaten en je bent klaar. Wel even de tellers
+    // updaten.
     tellers[*c2] += tellers[*c1];
     tellers[*c1] = 0;
     *c1 = *c2;
