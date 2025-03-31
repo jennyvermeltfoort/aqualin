@@ -45,8 +45,8 @@
 \setlength{\parskip}{\baselineskip}%
 \setlength{\parindent}{1pt}%
 
-\title{Opdracht 1, Programmeertechnieken}
-\author{Jenny Vermeltfoort, s3787494, groep 48}
+\title{Opdracht 1, Algoritmiek}
+\author{Jenny Vermeltfoort, s3787494, groep PO1\_15}
 
 \begin{document}
 
@@ -62,7 +62,13 @@ Het vind plaats op een 2d gerasteriseerd bord.
 Spelers leggen stenen op het bord; de speler met het grootste cluster aan het eind van het spel heeft gewonnen.
 Stenen bestaan uit een vorm en een kleur, het is dus de bedoeling dat de ene speler clusters maakt van kleuren en de andere speler clusters van vormen.
 Stenen worden op een bepaalde volgorde op het bord gelegd, het is dus aan de speler om te bepalen welke steen het beste past op de te leggen positie.
-Het spel heeft een aantal parameters, de maximaal hoeveelheid stenen per hand – wat per speler kan verschillen, de grootte van het bord, de hoeveelheid vormen, en hoeveel stenen er in het begin vanuit de pot op het bord worden gelegd. 
+Het spel heeft een aantal parameters, zoals 
+\begin{itemize}
+    \item de maximaal hoeveelheid stenen per hand – wat per speler kan verschillen, 
+    \item de grootte van het bord, 
+    \item de hoeveelheid vormen, 
+    \item en hoeveel stenen er in het begin vanuit de pot op het bord worden gelegd. 
+\end{itemize}
 De implementatie bestaat uit een aantal methodes om te bepalen welke steen het beste gelegd kan worden voor een bepaalde stand van het bord.
 
 
@@ -193,8 +199,14 @@ vormen: (1,0), (5,0), (3,4)
 In de volgende subsecties volgende de resultaten van de experimenten.
 De experimenten laten zien dat de verschillende parameters van de configuraties ervoor zorgen dat de beginnende speler gemiddeld er of beter of slechter vanaf is.
 Dit aangezien bij zowel experiment 1 als bij experiment 2 Brian de winnende speler is.
-De grootte van de hand heeft invloed op de einscore, hoe groter de hand hoe hoger de kans is dat de speler wint.
+De grootte van de hand heeft invloed op de eindscore, hoe groter de hand hoe hoger de kans is dat de speler wint.
 Dit is enigszins logisch, aangezien de speler met de grotere hand meer zetten kan analyzeren.
+
+De hoeveelheid vormen of kleuren heeft behoorlijk invloed op de eindscore, dit is komt doordat hoe lager de variate van kleuren of vormen is hoe meer kans de speler heeft om een groter cluster te maken. 
+Dit omdat de speler meer stenen met dezelfde index heeft.
+Bij een bord van drie bij vijf en vijf vormen heeft Brian bijvoorbeeld drie verschillende kleuren, ofwel hij heeft vijf stenen van een elke kleur, daarmee is zijn grootst te maken cluster vijf.
+Terwijl Robin drie stenen van elke kleur heeft, daarmee is zijn grootst te maken cluster drie.
+
 
 Verder is er te betogen dat de Monte Carlo implementatie beter een goede zet bepaald in vergelijking met de Grootste Cluster implementatie. 
 Te zien aan experiment 2 waar Brian bij elke configuratie net iets meer scoort.
@@ -204,14 +216,14 @@ Te zien aan experiment 2 waar Brian bij elke configuratie net iets meer scoort.
 \begin{table}[h]
     \centering
     \caption{Samengevoegde Scores, Tijdsduur en Configuratie-informatie}
-    \begin{tabular}{@{}cccccccc@{}}
+    \begin{tabular}{@{}ccccccccc@{}}
         \toprule
-        Configuratie & Hoogte & Breedte & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
+        Configuratie & Hoogte & Breedte &  Kleuren & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
         \midrule
-        1 & 4 & 4 & 4 & 2 & 2 & -0.99 & 0.200511 \\
-        2 & 4 & 5 & 4 & 2 & 2 & -1.69 & 3.56373 \\
-        3 & 3 & 5 & 5 & 2 & 2 & 0.69 & 0.1002 \\
-        4 & 4 & 4 & 4 & 3 & 2 & -0.18 & 1.67778 \\ 
+        1 & 4 & 4  & 4& 4 & 2 & 2 & -0.99 & 0.200511 \\
+        2 & 4 & 5  & 5& 4 & 2 & 2 & -1.69 & 3.56373 \\
+        3 & 3 & 5  & 3& 5 & 2 & 2 & 0.69 & 0.1002 \\
+        4 & 4 & 4  & 4& 4 & 3 & 2 & -0.18 & 1.67778 \\ 
         \bottomrule
     \end{tabular}
 \end{table}
@@ -222,14 +234,14 @@ Te zien aan experiment 2 waar Brian bij elke configuratie net iets meer scoort.
 \begin{table}[h]
     \centering
     \caption{Samengevoegde Scores, Tijdsduur en Configuratie-informatie}
-    \begin{tabular}{@{}cccccccc@{}}
+    \begin{tabular}{@{}ccccccccc@{}}
         \toprule
-        Configuratie & Hoogte & Breedte & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
+        Configuratie & Hoogte & Breedte  & Kleuren& Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
         \midrule
-        1 & 4 & 4 & 4 & 2 & 2 & -0.37 & 0.259286 \\
-        2 & 4 & 5 & 4 & 2 & 2 & -1.03 & 3.69457 \\
-        3 & 3 & 5 & 5 & 2 & 2 & 1.19 & 0.146323 \\
-        4 & 4 & 4 & 4 & 3 & 2 & 0.58 & 1.80519 \\
+        1 & 4 & 4 & 4 & 4 &  2 & 2 & -0.37 & 0.259286 \\
+        2 & 4 & 5 & 5 & 4 &  2 & 2 & -1.03 & 3.69457 \\
+        3 & 3 & 5 & 3 & 5 &  2 & 2 & 1.19 & 0.146323 \\
+        4 & 4 & 4 & 4 & 4 &  3 & 2 & 0.58 & 1.80519 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -237,18 +249,18 @@ Te zien aan experiment 2 waar Brian bij elke configuratie net iets meer scoort.
 
 \subsection{Experiment 3: GrootsteCluster vs MonteCarlo }
 De gemiddelde score voor dit experiment lijk enigszins instabiel; bij 100 iteraties varieert het tussen de gemiddelde score tussen -1.3 en -1.77.
-Met wat natte vinger werk is dit wel te verklaren, aangezien het bord bij deze configuratie de variantie aan beste zetten varieert door de grootte van het bord.
+Dit is intu\"itief te verklaren, aangezien het bord bij deze configuratie de beste zetten hier meer varieert door de grootte van het bord.
 Vandaar is er ook het resultaat met 1000 iteraties toegevoegd.
 
 \begin{table}[h]
     \centering
     \caption{Samengevoegde Scores, Tijdsduur en Configuratie-informatie}
-    \begin{tabular}{@{}cccccccc@{}}
+    \begin{tabular}{@{}ccccccccc@{}}
         \toprule
-        Iteraties & Hoogte & Breedte & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
+        Iteraties & Hoogte & Breedte & Kleuren & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
         \midrule
-        100 & 10 & 10 & 10 & 5 & 5 & -1.77 & 5.35924 \\
-        1000 & 10 & 10 & 10 & 5 & 5    & -1.604 & 52.5195 \\
+        100 & 10 & 10 & 10 & 10 & 5 & 5 & -1.77 & 5.35924 \\
+        1000 & 10 & 10 & 10 & 10 & 5 & 5    & -1.604 & 52.5195 \\
         \bottomrule
     \end{tabular}
 \end{table}
