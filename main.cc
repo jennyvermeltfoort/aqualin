@@ -237,19 +237,21 @@ typedef struct {
     int k1;
 } config_t;
 
-double voerConfigUit(config_t c, int algo1, int algo2) {
+double voerConfigUit(config_t c, int algo1, int algo2,
+                     float iteraties) {
     double sum = 0;
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < iteraties; i++) {
         int k[2] = {c.k0, c.k1};
         Aqualin *aq1 =
             new Aqualin(c.hoogte, c.breedte, c.vormen, 0, k);
         sum += aq1->speelUitScore(algo1, algo2);
         delete aq1;
     }
-    return sum / 100.0f;
+    return sum / iteraties;
 }
 
 void doeExperimentConfig(int algo1, int algo2) {
+    float iteraties = 100.0f;
     clock_t t1, t2;
     config_t configs[4] = {{4, 4, 4, 2, 2},
                            {4, 5, 4, 2, 2},
@@ -259,10 +261,11 @@ void doeExperimentConfig(int algo1, int algo2) {
     for (int z = 0; z < 4; z++) {
         config_t c = configs[z];
         t1 = clock();
-        double gem = voerConfigUit(c, algo1, algo2);
+        double gem = voerConfigUit(c, algo1, algo2, iteraties);
         t2 = clock();
         cout << "config " << z
-             << ": De gemiddelde score van Brian is: " << gem << endl;
+             << ": De gemiddelde score van Brian van " << iteraties
+             << " iteraties is : " << gem << endl;
         cout << "Dit kostte " << (t2 - t1) << " clock ticks, ofwel "
              << (((double)(t2 - t1)) / CLOCKS_PER_SEC) << " seconden."
              << endl;
@@ -287,19 +290,26 @@ void doeExperiment2() {
 
 //*************************************************************************
 
-// Voer experiment uit met een maximale configuratie,
-// voor de twee gretige algoritmes.
-void doeExperiment3() {
+void doe_exp_3(float iteraties) {
     clock_t t1, t2;
     t1 = clock();
-    double gem = voerConfigUit({10, 10, 10, 5, 5},
-                               AlgoGrootsteCluster, AlgoMonteCarlo);
+    double gem =
+        voerConfigUit({10, 10, 10, 5, 5}, AlgoGrootsteCluster,
+                      AlgoMonteCarlo, iteraties);
     t2 = clock();
-    cout << "De gemiddelde score van Brian is: " << gem << endl;
+    cout << "De gemiddelde score van Brian van " << iteraties
+         << " iteraties is : " << gem << endl;
     cout << "Dit kostte " << (t2 - t1) << " clock ticks, ofwel "
          << (((double)(t2 - t1)) / CLOCKS_PER_SEC) << " seconden."
          << endl;
     cout << endl;
+}
+
+// Voer experiment uit met een maximale configuratie,
+// voor de twee gretige algoritmes.
+void doeExperiment3() {
+    doe_exp_3(100.0f);
+    doe_exp_3(1000.0f);
 }  // doeExperiment3
 
 //*************************************************************************

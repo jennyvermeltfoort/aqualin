@@ -25,24 +25,22 @@
 \usepackage{fancyvrb}
 
 \frenchspacing
-
+\usepackage{booktabs}
 \usepackage{microtype}
 
 \usepackage[english,dutch]{babel}
 
 \usepackage{listings}
 % Er zijn talloze parameters ...
-\lstdefinestyle{myStyle}{
+\lstset{
     belowcaptionskip=1\baselineskip,
     breaklines=true,
-    frame=none,
-    numbers=left, numberstyle=\tiny, numberfirstline=false, breaklines=true,
-    stepnumber=1, tabsize=8,
-    basicstyle=\footnotesize\ttfamily,
-    keywordstyle=\bfseries\color{blue!40!black},
-    commentstyle=\itshape\color{green!40!black},
-    identifierstyle=\color{black},
+    columns=flexible,
+    basicstyle=\small\ttfamily,
 }
+\usepackage{graphicx}
+\usepackage{placeins}
+
 \usepackage{mathtools}
 \setlength{\parskip}{\baselineskip}%
 \setlength{\parindent}{1pt}%
@@ -89,39 +87,39 @@ De grootste cluster implementatie is presteerd echer ondermaats, maar is daarint
 
 \subsection{Spel 1}
 Resultaten voor spel1.txt
-\begin{verbatim}
+\begin{lstlisting}
     Optimale score is: 0
     Een optimale zet is: (1,2)
     We hebben hiervoor 16777216 standen bekeken.
     Dit kostte 6361731 clock ticks, ofwel 6.36173 seconden.
-\end{verbatim}
+\end{lstlisting}
 
 
-\begin{verbatim}
+\begin{lstlisting}
 Score grootste cluster tegen optimaal is: -3
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
 Score Monte Carlo tegen optimaal is: 0
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Spel 2}
 Resultaten voor spel2.txt
-\begin{verbatim}
+\begin{lstlisting}
     Optimale score is: 2
     Een optimale zet is: (2,0)
     We hebben hiervoor 93312 standen bekeken.
     Dit kostte 19915 clock ticks, ofwel 0.019915 seconden.
-\end{verbatim}
+\end{lstlisting}
 
 
-\begin{verbatim}
+\begin{lstlisting}
 Score grootste cluster tegen optimaal is: 1
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
 Score Monte Carlo tegen optimaal is: 2
-\end{verbatim}
+\end{lstlisting}
 
 \section{Toestand-actie boom}
 De hoeveelheid leaves van de toestand-actie boom is te berekenen met de volgende formule:
@@ -156,40 +154,200 @@ De variable $m$ is de hoeveelheid standen. Hierbij floor en ceil omdat Brian een
 \section{Grootste Cluster}
 
 \section{Experimenten}
+
 \subsection{Experiment 1: GrootsteCluster vs Optimaal}
-\begin{verbatim}
-    config 0: De gemiddelde score van Brian is: -0.99
-    Dit kostte 200511 clock ticks, ofwel 0.200511 seconden.
-    
-    config 1: De gemiddelde score van Brian is: -1.69
-    Dit kostte 3563727 clock ticks, ofwel 3.56373 seconden.
-    
-    config 2: De gemiddelde score van Brian is: 0.69
-    Dit kostte 100200 clock ticks, ofwel 0.1002 seconden.
-    
-    config 3: De gemiddelde score van Brian is: -0.18
-    Dit kostte 1677776 clock ticks, ofwel 1.67778 seconden.
-\end{verbatim}
+
+\begin{table}[h]
+    \centering
+    \caption{Samengevoegde Scores, Tijdsduur en Configuratie-informatie}
+    \begin{tabular}{@{}cccccccc@{}}
+        \toprule
+        Configuratie & Hoogte & Breedte & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
+        \midrule
+        1 & 4 & 4 & 4 & 2 & 2 & -0.99 & 0.200511 \\
+        2 & 4 & 5 & 4 & 2 & 2 & -1.69 & 3.56373 \\
+        3 & 3 & 5 & 5 & 2 & 2 & 0.69 & 0.1002 \\
+        4 & 4 & 4 & 4 & 3 & 2 & -0.18 & 1.67778 \\ 
+        \bottomrule
+    \end{tabular}
+\end{table}
+\FloatBarrier
 
 \subsection{Experiment 2: MonteCarlo vs Optimaal}
 
-\begin{verbatim}
-    config 0: De gemiddelde score van Brian is: -0.37
-    Dit kostte 259286 clock ticks, ofwel 0.259286 seconden.
-    
-    config 1: De gemiddelde score van Brian is: -1.03
-    Dit kostte 3694570 clock ticks, ofwel 3.69457 seconden.
-    
-    config 2: De gemiddelde score van Brian is: 1.19
-    Dit kostte 146323 clock ticks, ofwel 0.146323 seconden.
-    
-    config 3: De gemiddelde score van Brian is: 0.58
-    Dit kostte 1805194 clock ticks, ofwel 1.80519 seconden.
-\end{verbatim}
+\begin{table}[h]
+    \centering
+    \caption{Samengevoegde Scores, Tijdsduur en Configuratie-informatie}
+    \begin{tabular}{@{}cccccccc@{}}
+        \toprule
+        Configuratie & Hoogte & Breedte & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
+        \midrule
+        1 & 4 & 4 & 4 & 2 & 2 & -0.37 & 0.259286 \\
+        2 & 4 & 5 & 4 & 2 & 2 & -1.03 & 3.69457 \\
+        3 & 3 & 5 & 5 & 2 & 2 & 1.19 & 0.146323 \\
+        4 & 4 & 4 & 4 & 3 & 2 & 0.58 & 1.80519 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\FloatBarrier
 
 \subsection{Experiment 3: GrootsteCluster vs MonteCarlo }
-\begin{verbatim}
-    De gemiddelde score van brian is: -1.77
-\end{verbatim}
+De gemiddelde score voor dit experiment lijk enigzins instabiel, bij 100 iteraties varieert het tussen de -1.3 en -1.77.
+Met wat natte vinger werk is dit wel te verklaren, aangezien het bord bij deze configuratie ontzettend groot is en daarmee de variatie ook toeneemt.
+Vandaar heb ik ook 1000 iteraties getest.
+
+\begin{table}[h]
+    \centering
+    \caption{Samengevoegde Scores, Tijdsduur en Configuratie-informatie}
+    \begin{tabular}{@{}cccccccc@{}}
+        \toprule
+        Iteraties & Hoogte & Breedte & Vormen & k0 & k1 & Gemiddelde Score & Tijdsduur (seconden) \\ 
+        \midrule
+        100 & 10 & 10 & 10 & 5 & 5 & -1.77 & 5.35924 \\
+        1000 & 10 & 10 & 10 & 5 & 5    & -1.604 & 52.5195 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\FloatBarrier
+
+
+
+\begin{appendices}
+    \section{Experimenten Logs}
+    \subsection{spel1.txt}
+    \begin{lstlisting}
+    Optimale score is: 0
+    Een optimale zet is: (1,2)
+    We hebben hiervoor 16777216 standen bekeken.
+    Dit kostte 4790511 clock ticks, ofwel 4.79051 seconden.
+    (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (-1,-1) (0,3)   (0,1)   (3,4)   (-1,-1)
+    (-1,-1) (-1,-1) (1,3)   (4,3)   (2,1)   (-1,-1)
+    (-1,-1) (-1,-1) (2,4)   (-1,-1) (-1,-1) (-1,-1)
+    (5,5)   (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (4,4)   (-1,-1) (-1,-1) (3,5)   (-1,-1)
+    vulvolgorde (x,y):(2,5)(2,0)(1,0)(5,1)(0,2)(4,4)(3,0)(0,3)(5,4)(0,0)(1,4)(4,0)(0,1)(5,0)(3,5)(3,4)(5,3)(4,3)(2,4)(3,3)(1,2)(1,1)(5,5)(1,3)(5,2)(0,5)
+    pot (kleur,vorm):(5,3)(5,4)(1,0)(0,0)(4,2)(4,1)(2,3)(3,0)(5,0)(2,2)(2,0)(4,5)(2,5)(4,0)(1,4)(0,4)(3,1)(1,5)(1,1)(5,1)(3,3)(5,2)
+    hand_kleuren(kleur,vorm):(8: 1,2)(5: 0,5)
+    hand_vormen(kleur,vorm):(2: 0,2)(20: 3,2)
+
+    Score grootste cluster tegen optimaal is: -3
+    (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (-1,-1) (0,3)   (0,1)   (3,4)   (-1,-1)
+    (-1,-1) (-1,-1) (1,3)   (4,3)   (2,1)   (-1,-1)
+    (-1,-1) (-1,-1) (2,4)   (-1,-1) (-1,-1) (-1,-1)
+    (5,5)   (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (4,4)   (-1,-1) (-1,-1) (3,5)   (-1,-1)
+    vulvolgorde (x,y):(2,5)(2,0)(1,0)(5,1)(0,2)(4,4)(3,0)(0,3)(5,4)(0,0)(1,4)(4,0)(0,1)(5,0)(3,5)(3,4)(5,3)(4,3)(2,4)(3,3)(1,2)(1,1)(5,5)(1,3)(5,2)(0,5)
+    pot (kleur,vorm):(5,3)(5,4)(1,0)(0,0)(4,2)(4,1)(2,3)(3,0)(5,0)(2,2)(2,0)(4,5)(2,5)(4,0)(1,4)(0,4)(3,1)(1,5)(1,1)(5,1)(3,3)(5,2)
+    hand_kleuren(kleur,vorm):(8: 1,2)(5: 0,5)
+    hand_vormen(kleur,vorm):(2: 0,2)(20: 3,2)
+
+    Score Monte Carlo tegen optimaal is: 0
+    (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (-1,-1) (0,3)   (0,1)   (3,4)   (-1,-1)
+    (-1,-1) (-1,-1) (1,3)   (4,3)   (2,1)   (-1,-1)
+    (-1,-1) (-1,-1) (2,4)   (-1,-1) (-1,-1) (-1,-1)
+    (5,5)   (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (4,4)   (-1,-1) (-1,-1) (3,5)   (-1,-1)
+    vulvolgorde (x,y):(2,5)(2,0)(1,0)(5,1)(0,2)(4,4)(3,0)(0,3)(5,4)(0,0)(1,4)(4,0)(0,1)(5,0)(3,5)(3,4)(5,3)(4,3)(2,4)(3,3)(1,2)(1,1)(5,5)(1,3)(5,2)(0,5)
+    pot (kleur,vorm):(5,3)(5,4)(1,0)(0,0)(4,2)(4,1)(2,3)(3,0)(5,0)(2,2)(2,0)(4,5)(2,5)(4,0)(1,4)(0,4)(3,1)(1,5)(1,1)(5,1)(3,3)(5,2)
+    hand_kleuren(kleur,vorm):(8: 1,2)(5: 0,5)
+    hand_vormen(kleur,vorm):(2: 0,2)(20: 3,2)
+
+    Score grootste cluster tegen Monte Carlo is: -3
+    (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (-1,-1) (0,3)   (0,1)   (3,4)   (-1,-1)
+    (-1,-1) (-1,-1) (1,3)   (4,3)   (2,1)   (-1,-1)
+    (-1,-1) (-1,-1) (2,4)   (-1,-1) (-1,-1) (-1,-1)
+    (5,5)   (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+    (-1,-1) (4,4)   (-1,-1) (-1,-1) (3,5)   (-1,-1)
+    vulvolgorde (x,y):(2,5)(2,0)(1,0)(5,1)(0,2)(4,4)(3,0)(0,3)(5,4)(0,0)(1,4)(4,0)(0,1)(5,0)(3,5)(3,4)(5,3)(4,3)(2,4)(3,3)(1,2)(1,1)(5,5)(1,3)(5,2)(0,5)
+    pot (kleur,vorm):(5,3)(5,4)(1,0)(0,0)(4,2)(4,1)(2,3)(3,0)(5,0)(2,2)(2,0)(4,5)(2,5)(4,0)(1,4)(0,4)(3,1)(1,5)(1,1)(5,1)(3,3)(5,2)
+    hand_kleuren(kleur,vorm):(8: 1,2)(5: 0,5)
+    hand_vormen(kleur,vorm):(2: 0,2)(20: 3,2)
+    \end{lstlisting}
+    \subsection{spel2.txt}
+    \begin{lstlisting}
+        Optimale score is: 2
+        Een optimale zet is: (2,0)
+        We hebben hiervoor 93312 standen bekeken.
+        Dit kostte 16583 clock ticks, ofwel 0.016583 seconden.
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+        (-1,-1) (-1,-1) (-1,-1) (2,1)   (2,2)
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (1,1)
+        (-1,-1) (-1,-1) (0,5)   (2,4)   (-1,-1)
+        vulvolgorde (x,y):(1,1)(0,1)(0,3)(1,0)(2,1)(0,2)(0,0)(4,0)(2,0)(3,0)(1,2)(3,2)(1,3)(4,3)(2,2)
+        pot (kleur,vorm):(2,5)(0,3)(3,1)(3,0)(1,0)(0,0)(0,1)(1,5)(1,2)(1,4)
+        hand_kleuren(kleur,vorm):(4: 0,4)(12: 2,0)
+        hand_vormen(kleur,vorm):(2: 0,2)(15: 2,3)(9: 1,3)
+
+        Score grootste cluster tegen optimaal is: 1
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+        (-1,-1) (-1,-1) (-1,-1) (2,1)   (2,2)
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (1,1)
+        (-1,-1) (-1,-1) (0,5)   (2,4)   (-1,-1)
+        vulvolgorde (x,y):(1,1)(0,1)(0,3)(1,0)(2,1)(0,2)(0,0)(4,0)(2,0)(3,0)(1,2)(3,2)(1,3)(4,3)(2,2)
+        pot (kleur,vorm):(2,5)(0,3)(3,1)(3,0)(1,0)(0,0)(0,1)(1,5)(1,2)(1,4)
+        hand_kleuren(kleur,vorm):(4: 0,4)(12: 2,0)
+        hand_vormen(kleur,vorm):(2: 0,2)(15: 2,3)(9: 1,3)
+
+        Score Monte Carlo tegen optimaal is: 2
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+        (-1,-1) (-1,-1) (-1,-1) (2,1)   (2,2)
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (1,1)
+        (-1,-1) (-1,-1) (0,5)   (2,4)   (-1,-1)
+        vulvolgorde (x,y):(1,1)(0,1)(0,3)(1,0)(2,1)(0,2)(0,0)(4,0)(2,0)(3,0)(1,2)(3,2)(1,3)(4,3)(2,2)
+        pot (kleur,vorm):(2,5)(0,3)(3,1)(3,0)(1,0)(0,0)(0,1)(1,5)(1,2)(1,4)
+        hand_kleuren(kleur,vorm):(4: 0,4)(12: 2,0)
+        hand_vormen(kleur,vorm):(2: 0,2)(15: 2,3)(9: 1,3)
+
+        Score grootste cluster tegen Monte Carlo is: 1
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (-1,-1)
+        (-1,-1) (-1,-1) (-1,-1) (2,1)   (2,2)
+        (-1,-1) (-1,-1) (-1,-1) (-1,-1) (1,1)
+        (-1,-1) (-1,-1) (0,5)   (2,4)   (-1,-1)
+        vulvolgorde (x,y):(1,1)(0,1)(0,3)(1,0)(2,1)(0,2)(0,0)(4,0)(2,0)(3,0)(1,2)(3,2)(1,3)(4,3)(2,2)
+        pot (kleur,vorm):(2,5)(0,3)(3,1)(3,0)(1,0)(0,0)(0,1)(1,5)(1,2)(1,4)
+        hand_kleuren(kleur,vorm):(4: 0,4)(12: 2,0)
+        hand_vormen(kleur,vorm):(2: 0,2)(15: 2,3)(9: 1,3)
+    \end{lstlisting}
+    \subsection{Experiment 1}
+    \begin{lstlisting}
+        config 0: De gemiddelde score van Brian is: -0.99
+        Dit kostte 200511 clock ticks, ofwel 0.200511 seconden.
+        
+        config 1: De gemiddelde score van Brian is: -1.69
+        Dit kostte 3563727 clock ticks, ofwel 3.56373 seconden.
+        
+        config 2: De gemiddelde score van Brian is: 0.69
+        Dit kostte 100200 clock ticks, ofwel 0.1002 seconden.
+        
+        config 3: De gemiddelde score van Brian is: -0.18
+        Dit kostte 1677776 clock ticks, ofwel 1.67778 seconden.
+    \end{lstlisting}
+    \subsection{Experiment 2}
+    \begin{lstlisting}
+        config 0: De gemiddelde score van Brian is: -0.37
+        Dit kostte 259286 clock ticks, ofwel 0.259286 seconden.
+        
+        config 1: De gemiddelde score van Brian is: -1.03
+        Dit kostte 3694570 clock ticks, ofwel 3.69457 seconden.
+        
+        config 2: De gemiddelde score van Brian is: 1.19
+        Dit kostte 146323 clock ticks, ofwel 0.146323 seconden.
+        
+        config 3: De gemiddelde score van Brian is: 0.58
+        Dit kostte 1805194 clock ticks, ofwel 1.80519 seconden.
+    \end{lstlisting}
+    \subsection{Experiment 3}
+    \begin{lstlisting}
+        De gemiddelde score van Brian is: -1.77
+    Dit kostte 5359240 clock ticks, ofwel 5.35924 seconden.
+
+        De gemiddelde score van Brian is: -1.604
+    Dit kostte 52519495 clock ticks, ofwel 52.5195 seconden.
+    \end{lstlisting}
+\end{appendices}
 
 \end{document}

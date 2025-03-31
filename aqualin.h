@@ -8,7 +8,7 @@ using namespace std;
 
 class Hand {
    private:
-    bool heeft_opslag[MaxDimensie * MaxDimensie / 2 +
+    bool heeft_opslag[MaxDimensie * MaxDimensie / 2 + 1 +
                       MaxKleurenVormen * MaxKleurenVormen + 1];
 
     /**
@@ -24,15 +24,15 @@ class Hand {
     /**
      * @brief Map een steen aan een index voor hand[].
      */
-    int index_opslag[MaxDimensie * MaxDimensie / 2 +
+    int index_opslag[MaxDimensie * MaxDimensie / 2 + 1 +
                      MaxKleurenVormen * MaxKleurenVormen];
     int *index;
 
     /**
      * @brief Een lijst van vrije indexes.
      */
-    int prul[MaxDimensie * MaxDimensie / 2];
-    int pot[MaxDimensie * MaxDimensie / 2];
+    int prul[MaxDimensie * MaxDimensie / 2 + 1];
+    int pot[MaxDimensie * MaxDimensie / 2 + 1];
     int prul_index = 0;
     int pot_index = 0;
     int aantal_pot = 0;

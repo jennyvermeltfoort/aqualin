@@ -10,8 +10,8 @@
 #include "standaard.h"
 
 Hand::Hand(void) {
-    heeft = &heeft_opslag[MaxDimensie * MaxDimensie / 2 + 1];
-    index = &index_opslag[MaxDimensie * MaxDimensie / 2];
+    heeft = &heeft_opslag[MaxDimensie * MaxDimensie / 2 + 1 + 1];
+    index = &index_opslag[MaxDimensie * MaxDimensie / 2 + 1];
 
     heeft[-1] = false;
 
@@ -21,7 +21,7 @@ Hand::Hand(void) {
 
     // pad de pot met unieke negatieve stenen zodat er geen if
     // statements nodig zijn in de rest van de code.
-    for (int i = 0; i < MaxDimensie * MaxDimensie / 2; i++) {
+    for (int i = 0; i < MaxDimensie * MaxDimensie / 2 + 1; i++) {
         pot[i] = -(i + 2);  // +2 om -1 voor heeft[-1] false te laten.
     }
 }
@@ -612,7 +612,12 @@ int Aqualin::speelUitScore(int algo1, int algo2) {
 
     while (!eindstand()) {
         steen_t zet = (this->*speler_algo[speler_actief])();
-        doeZet(zet.first, zet.second);
+        if (!doeZet(zet.first, zet.second)) {
+            un_doe_zet();
+            drukAf();
+            cout << "er ging iets fout!" << endl;
+            break;
+        };
         aantal_zetten++;
     }
 
