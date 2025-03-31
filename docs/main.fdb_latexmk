@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1743448070.60457 "/home/jenny/Projecten/aqualin/docs/main.tex" "main.pdf" "main" 1743448071.28676 0
+["pdflatex"] 1743449276.24192 "/home/jenny/Projecten/aqualin/docs/main.tex" "main.pdf" "main" 1743449276.91512 0
   "/etc/texmf/web2c/texmf.cnf" 1738572647.17301 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/jenny/Projecten/aqualin/docs/main.tex" 1743448069.7618 18697 6cb652f51922f5fadaf3488911dbcb19 ""
+  "/home/jenny/Projecten/aqualin/docs/main.tex" 1743449276.06733 18698 9efdd50c77253c05addad0297ef6bc0e ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1136768653 3584 402da0b29eafbad07963b1224b222f18 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm" 1136768653 3584 13049b61b922a28b158a38aeff75ee9b ""
@@ -129,9 +129,9 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1738572672.68333 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1738572743 8214218 312678b761c056ef6ef0bdc34acfd4e1 ""
-  "main.aux" 1743448071.21483 2925 77b20766c10ac70812cdfa116080ac1a "pdflatex"
-  "main.out" 1743448071.21583 2477 a3fb3baa50eac39542a7e61a168a3e5f "pdflatex"
-  "main.tex" 1743448069.7618 18697 6cb652f51922f5fadaf3488911dbcb19 ""
+  "main.aux" 1743449276.84535 2925 77b20766c10ac70812cdfa116080ac1a "pdflatex"
+  "main.out" 1743449276.84635 2477 a3fb3baa50eac39542a7e61a168a3e5f "pdflatex"
+  "main.tex" 1743449276.06733 18698 9efdd50c77253c05addad0297ef6bc0e ""
   (generated)
   "main.aux"
   "main.log"
