@@ -1,6 +1,6 @@
 CC = g++
 
-CompileParms = -c -Wall -std=c++11 -O3
+CompileParms = -c -Wall -std=c++11 -O2
 
 OBJS = standaard.o aqualin.o main.o
 
